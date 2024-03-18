@@ -1,6 +1,6 @@
 from django.db import models
+from django.conf import settings
 from contacts.models import Contact
-from customers.models import Agent
 from hotels.models import HotelRoom
 
 
@@ -12,7 +12,7 @@ from hotels.models import HotelRoom
 
 class ComponentType(models.Model):
     name = models.CharField(max_length=100)
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     is_deletable = models.BooleanField(default=True)  # Hotel room type can have this as False
 
     def __str__(self):
@@ -36,11 +36,9 @@ CATEGORY_CHOICES = [
 ]
 
 
-
-
 class Component(models.Model):
 
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     hotel_room = models.ForeignKey(HotelRoom, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField()

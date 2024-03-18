@@ -1,21 +1,23 @@
 from django.db import models
-from customers.models import Customer, Agent
+from django.conf import settings
 from hotels.models import Hotel
 from contacts.models import Contact
+
 # Create your models here.
 
+review_status = [("pending", "Pending"), ("rejected", "Rejected"), ("approved", "Approved")]
 
 class Review(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name ='reviews_customer')
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, blank=True)
-    agent = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True)
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name ='reviews_agent')
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
     review_description = models.CharField(max_length=220)
     rating = models.IntegerField(default=0)
     date_created = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     month_of_experience = models.IntegerField(default=0)
     anonymous_review = models.BooleanField(default=False)
-
+    status = models.CharField(max_length=255, choices= review_status, default="pending")
 
     # Visibility control
     visible_to_all = models.BooleanField(default=True)  # False for agent's private review

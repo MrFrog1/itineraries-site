@@ -1,12 +1,10 @@
 from django.db import models
 from region.models import Region
-from customers.models import Agent, Customer
+from django.conf import settings
 from contacts.models import Contact
 from components.models import Component
 from django.core.exceptions import ValidationError
 from db_changes.models import DbChange
-
-
 
 
 
@@ -38,8 +36,8 @@ CATEGORY_CHOICES = [
 class Itinerary(models.Model):
     name = models.CharField(max_length=45)
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
-    agent = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_related")
-    expert = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_experts")
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_related")
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_experts")
     guide = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
     verified_by_admin = models.BooleanField(default=False)
 
@@ -62,7 +60,7 @@ class NonCustomerParticipant(models.Model):
 
 
 class AgentItinerary(Itinerary):
-    agent = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True, related_name="agent_itineraries")
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="agent_itineraries")
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)  # Define CATEGORY_CHOICES elsewhere
     customisable = models.BooleanField(default=False)
     cost_for_1_pax = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -101,7 +99,7 @@ class AgentItinerary(Itinerary):
     max_group_size = models.IntegerField(null=True, blank=True, help_text="Maximum number of guests for the group.")
 
     # Relationship with customers and non-customers
-    customers = models.ManyToManyField(Customer, blank=True, related_name="joined_group_itineraries")
+    customers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="joined_group_itineraries")
     non_customer_participants = models.ManyToManyField(NonCustomerParticipant, blank=True)
 
 
@@ -147,7 +145,7 @@ class AgentItinerary(Itinerary):
     
 class CustomerItinerary(Itinerary):
     original_itinerary = models.ForeignKey(AgentItinerary, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     customer_notes = models.TextField(max_length=800, blank=True, null=True)
     number_of_adults = models.IntegerField()
     number_of_children_6_to_12 = models.IntegerField()
@@ -293,7 +291,7 @@ class ItineraryDayComponent(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True)
     component = models.ForeignKey(Component, on_delete=models.CASCADE)
     # So, the copmonent belongs to an agent. But, whhen paired with an itinerary day, then a customer has control of that. We can access all components for an itinerary day of a customer through here
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     customer_note = models.TextField()
 
     # Additional fields can be added here if needed, such as quantity, notes, etc.

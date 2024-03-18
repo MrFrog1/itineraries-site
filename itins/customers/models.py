@@ -1,101 +1,101 @@
-from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.apps import apps
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+class User(AbstractUser):
+    # Common fields
+    phone_number = models.CharField(max_length=50, blank=True, null=True)
+    email_address = models.EmailField(blank=True, null=True, unique=True)
+    country = models.CharField(max_length=55, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    public_profile = models.BooleanField(default=False)
+    nickname = models.CharField(max_length=50, blank=True, null=True)
 
+    # Role-based fields
+    is_agent = models.BooleanField(default=False)
+    is_customer = models.BooleanField(default=False)
+
+    def has_interacted_with(self, other_user):
+        # Dynamically import the Message and CustomerItinerary models
+        Message = apps.get_model('messages_user', 'Message')
+        CustomerItinerary = apps.get_model('itineraries', 'CustomerItinerary')
+        
+        if self.is_customer:
+            messages_sent_to_agent = Message.objects.filter(sender=self, recipient=other_user).exists()
+            if messages_sent_to_agent:
+                return True
+        
+            shared_itinerary = CustomerItinerary.objects.filter(customer=self, agent=other_user).exists()
+            if shared_itinerary:
+                return True
+            
+
+            
 class ExpertiseCategory(models.Model):
     name = models.CharField(max_length=100)
 
-
-class Agent(AbstractUser):
-    phone_number = models.CharField(max_length=50)
-    email_address = models.EmailField()
-    region = models.CharField(max_length=100)
-    bio = models.TextField(max_length=450)
-    public_profile = models.BooleanField(default=True)
-    expertise_category = models.ManyToManyField(ExpertiseCategory)  # Assuming you'll define this elsewhere
+class AgentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='agent_profile')
+    bio = models.TextField(max_length=450, blank=True, null=True)
+    expertise_category = models.ManyToManyField(ExpertiseCategory, blank=True)
     hotel_owner = models.BooleanField(default=False)
     paired_with_other_agent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    join_date = models.DateField()
-    nickname = models.CharField(max_length=50)
-    agent_starting_date = models.DateField(null=True, blank=True) # This is the date the agent started working, so we can calculate their experience
-
+    join_date = models.DateField(null=True, blank=True)
+    agent_starting_date = models.DateField(null=True, blank=True)  # For calculating experience
     admin_description = models.TextField(max_length=450, blank=True, null=True)
-
     default_commission_percentage = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     default_organisation_fee = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='agent_groups',
-        blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='agent_permissions',
-        blank=True
-    )
 
 class InterestCategory(models.Model):
     name = models.CharField(max_length=100)
-    # Other fields you may need for the category
- 
 
-class Customer(AbstractUser):
-    name = models.CharField(max_length=50)
-    nickname = models.CharField(max_length=50)
-
-    blocked_agents = models.ManyToManyField('Agent', blank=True, through='BlockedAgent')
-
-    phone_number = models.CharField(max_length=50)
-    email_address = models.EmailField()
-    public_profile = models.BooleanField(default=False)
-    location = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    interests = models.ManyToManyField(InterestCategory)  # Assuming you'll define this elsewhere
-
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='customer_groups',
-        blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='customer_permissions',
-        blank=True
-    )
+    def __str__(self):
+        return self.name
+    
+    
+class CustomerProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
+    interests = models.ManyToManyField(InterestCategory, blank=True)
 
     def block_agent(self, agent):
-        BlockedAgent.objects.get_or_create(customer=self, agent=agent)
+        BlockedAgent.objects.get_or_create(customer=self.user, agent=agent)
 
     def is_agent_blocked(self, agent):
-        return BlockedAgent.objects.filter(customer=self, agent=agent).exists()
+        return BlockedAgent.objects.filter(customer=self.user, agent=agent).exists()
 
     def has_blocked(self, agent):
         return self.blocked_agents.filter(id=agent.id).exists()
 
-    def has_interacted_with(self, agent):
-        # Dynamically retrieve the CustomerItinerary model
-        CustomerItinerary = apps.get_model('itineraries', 'CustomerItinerary')
-        # Check for shared itineraries
-        itineraries_exist = CustomerItinerary.objects.filter(customer=self, agent=agent).exists()
 
-# Once messaging is sorted, replace this with the following:
 
-        # # Dynamically retrieve the Message model (replace 'app_name' with the actual app name where Message model is located)
-        # Message = apps.get_model('app_name', 'Message')
-        # # Check for messages exchanged
-        # messages_exist = Message.objects.filter(sender=self.user, recipient=agent.user).exists() or \
-        #                  Message.objects.filter(sender=agent.user, recipient=self.user).exists()
-
-        return itineraries_exist #or messages_exist
-    
 class BlockedAgent(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_blocked_agents')
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
-
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer_blockings')
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='agent_blockings')
+    
     class Meta:
         unique_together = ['customer', 'agent']
 
     def __str__(self):
-        return f"{self.customer.user.username} blocked {self.agent.user.username}"
+        return f"{self.customer.username} blocked {self.agent.username}"
+    
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if instance.is_customer:
+        # Use get_or_create to avoid creating a duplicate profile
+        CustomerProfile.objects.get_or_create(user=instance)
+    if instance.is_agent:
+        # Use get_or_create to avoid creating a duplicate profile
+        AgentProfile.objects.get_or_create(user=instance)
+
+    # If the user already exists and is being saved (not created), this ensures the profile is also saved.
+    # It's helpful in scenarios where the profile exists but needs to be updated based on changes to the User instance.
+    if not created:
+        if instance.is_customer:
+            instance.customer_profile.save()
+        if instance.is_agent:
+            instance.agent_profile.save()

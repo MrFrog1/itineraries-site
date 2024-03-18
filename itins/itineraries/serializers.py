@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from customers.serializers import AgentSerializer
 from region.serializers import RegionSerializer
 from contacts.serializers import ContactSerializer
-from customers.serializers import CustomerSerializer, AgentSerializer
 from .models import Itinerary, ItineraryGroup, ItineraryGrouping, ItineraryDay, ItineraryDayComponent, CustomerItinerary, AgentItinerary
 
 
@@ -81,10 +79,8 @@ class ItineraryGroupingSerializer(serializers.ModelSerializer):
     
 
 class ItinerarySerializer(serializers.ModelSerializer):
-    agent = AgentSerializer(read_only=True)
     region = RegionSerializer(read_only=True)
     guide = ContactSerializer(read_only=True)
-    customer = CustomerSerializer(read_only=True)
     itinerary_groups = ItineraryGroupingSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
     created_at = serializers.DateTimeField(read_only=True)  # Assuming your model has this field
@@ -114,11 +110,19 @@ class ItinerarySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("An itinerary with this name already exists.")
         return value
 
+
+    def to_representation(self, instance):
+        # Delayed import
+        from customers.serializers import UserSerializer
+        ret = super().to_representation(instance)
+        ret['agent'] = UserSerializer(instance.agent, read_only=True).data
+        ret['customer'] = UserSerializer(instance.customer, read_only=True).data
+        return ret
+    
     # Add other validation methods as 
     
 class CustomerItinerarySerializer(serializers.ModelSerializer):
     agent_itinerary = serializers.PrimaryKeyRelatedField(read_only=True)
-    customer = CustomerSerializer(read_only=True)
     itinerary_days = ItineraryDaySerializer(many=True, read_only=True)
 
     class Meta:
@@ -138,12 +142,13 @@ class CustomerItinerarySerializer(serializers.ModelSerializer):
             for component in day.get('itinerary_day_components', []):
                 component.pop('net_price', None)
 
+        from customers.serializers import UserSerializer       
+        representation['customer'] = UserSerializer(instance.customer, read_only=True).data
         return representation
+
 
 class AgentItinerarySerializer(serializers.ModelSerializer):
     region = RegionSerializer(read_only=True)
-    agent = AgentSerializer(read_only=True)
-    expert = AgentSerializer(read_only=True)
     guide = ContactSerializer(read_only=True)
     itinerary_groups = ItineraryGroupingSerializer(many=True, read_only=True)
 
@@ -158,5 +163,12 @@ class AgentItinerarySerializer(serializers.ModelSerializer):
         # Hide the price breakdown if it should not be visible
         if not instance.price_breakdown_visible:
             representation.pop('price_breakdown', None)
+
+        from customers.serializers import UserSerializer       
+        representation['agent'] = UserSerializer(instance.agent, read_only=True).data
+        representation['expert'] = UserSerializer(instance.expert, read_only=True).data
+
+        return representation
+    
 
         return representation

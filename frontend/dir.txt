@@ -1,0 +1,461 @@
+ Volume in drive C is Local Disk
+ Volume Serial Number is 4A1D-5A93
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend
+
+17/03/2024  10:31    <DIR>          .
+17/03/2024  10:31    <DIR>          ..
+17/02/2024  20:12               566 .eslintrc.cjs
+17/02/2024  20:12               253 .gitignore
+21/02/2024  18:50    <DIR>          app
+27/02/2024  08:40    <DIR>          components
+27/02/2024  12:52               344 components.json
+17/03/2024  10:31                 0 dir.txt
+18/02/2024  16:21    <DIR>          dist
+18/02/2024  15:50    <DIR>          html
+26/02/2024  15:40               355 index.html
+27/02/2024  09:36               141 jsconfig.json
+13/03/2024  17:18    <DIR>          node_modules
+13/03/2024  17:18           238,193 package-lock.json
+13/03/2024  17:18             1,595 package.json
+11/03/2024  11:08               210 postcss.config.cjs
+11/03/2024  18:12    <DIR>          public
+17/02/2024  20:12               451 README.md
+10/03/2024  17:49    <DIR>          src
+10/03/2024  18:59             9,872 style.css
+11/03/2024  15:06             1,392 tailwind.config.js
+13/03/2024  17:17             1,020 vite.config.js
+              13 File(s)        254,392 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\app
+
+21/02/2024  18:50    <DIR>          .
+21/02/2024  18:50    <DIR>          ..
+10/03/2024  18:58               198 globals.css
+               1 File(s)            198 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\components
+
+27/02/2024  08:40    <DIR>          .
+27/02/2024  08:40    <DIR>          ..
+27/02/2024  08:40    <DIR>          component
+27/02/2024  08:25    <DIR>          ui
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\components\component
+
+27/02/2024  08:40    <DIR>          .
+27/02/2024  08:40    <DIR>          ..
+27/02/2024  08:40             1,215 component.jsx
+               1 File(s)          1,215 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\components\ui
+
+27/02/2024  08:25    <DIR>          .
+27/02/2024  08:25    <DIR>          ..
+27/02/2024  08:45             1,966 button.jsx
+27/02/2024  08:45             1,585 card.jsx
+27/02/2024  08:25             5,039 carousel.jsx
+27/02/2024  08:46               759 input.jsx
+28/02/2024  16:04               541 label.jsx
+               5 File(s)          9,890 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\dist
+
+18/02/2024  16:21    <DIR>          .
+18/02/2024  16:21    <DIR>          ..
+18/02/2024  16:21    <DIR>          assets
+18/02/2024  16:21               456 index.html
+17/02/2024  20:12             4,126 react.svg
+17/02/2024  20:12             1,497 vite.svg
+               3 File(s)          6,079 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\dist\assets
+
+18/02/2024  16:21    <DIR>          .
+18/02/2024  16:21    <DIR>          ..
+18/02/2024  16:21    <DIR>          css
+18/02/2024  16:21    <DIR>          js
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\dist\assets\css
+
+18/02/2024  16:21    <DIR>          .
+18/02/2024  16:21    <DIR>          ..
+18/02/2024  16:21             1,391 index.min.css
+               1 File(s)          1,391 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\dist\assets\js
+
+18/02/2024  16:21    <DIR>          .
+18/02/2024  16:21    <DIR>          ..
+18/02/2024  16:21           143,433 index.min.js
+               1 File(s)        143,433 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\html
+
+18/02/2024  15:50    <DIR>          .
+18/02/2024  15:50    <DIR>          ..
+27/02/2024  22:24             1,024 base.html
+               1 File(s)          1,024 bytes
+
+ 
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\public
+
+11/03/2024  18:12    <DIR>          .
+11/03/2024  18:12    <DIR>          ..
+11/03/2024  18:12    <DIR>          fonts
+09/03/2024  19:06    <DIR>          images
+17/02/2024  20:12             4,126 react.svg
+17/02/2024  20:12             1,497 vite.svg
+               2 File(s)          5,623 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\public\fonts
+
+11/03/2024  18:12    <DIR>          .
+11/03/2024  18:12    <DIR>          ..
+10/03/2024  17:49           199,056 Montserrat-Black.ttf
+10/03/2024  17:49           203,860 Montserrat-BlackItalic.ttf
+10/03/2024  17:49           198,120 Montserrat-Bold.ttf
+10/03/2024  17:49           202,864 Montserrat-BoldItalic.ttf
+10/03/2024  17:49           199,276 Montserrat-ExtraBold.ttf
+10/03/2024  17:49           203,940 Montserrat-ExtraBoldItalic.ttf
+10/03/2024  17:49           197,420 Montserrat-ExtraLight.ttf
+10/03/2024  17:49           202,276 Montserrat-ExtraLightItalic.ttf
+10/03/2024  17:49           202,344 Montserrat-Italic.ttf
+10/03/2024  17:49           197,716 Montserrat-Light.ttf
+10/03/2024  17:49           202,460 Montserrat-LightItalic.ttf
+10/03/2024  17:49           197,756 Montserrat-Medium.ttf
+10/03/2024  17:49           202,432 Montserrat-MediumItalic.ttf
+10/03/2024  17:49           197,624 Montserrat-Regular.ttf
+10/03/2024  17:49           197,964 Montserrat-SemiBold.ttf
+10/03/2024  17:49           202,736 Montserrat-SemiBoldItalic.ttf
+10/03/2024  17:49           197,104 Montserrat-Thin.ttf
+10/03/2024  17:49           201,864 Montserrat-ThinItalic.ttf
+10/03/2024  18:40            35,176 Optima Roman.otf
+10/03/2024  17:49           168,060 Roboto-Black.ttf
+10/03/2024  17:49           174,108 Roboto-BlackItalic.ttf
+10/03/2024  17:49           167,336 Roboto-Bold.ttf
+10/03/2024  17:49           171,508 Roboto-BoldItalic.ttf
+10/03/2024  17:49           170,504 Roboto-Italic.ttf
+10/03/2024  17:49           167,000 Roboto-Light.ttf
+10/03/2024  17:49           173,172 Roboto-LightItalic.ttf
+10/03/2024  17:49           168,644 Roboto-Medium.ttf
+10/03/2024  17:49           173,416 Roboto-MediumItalic.ttf
+10/03/2024  17:49           168,260 Roboto-Regular3.ttf
+10/03/2024  17:49           168,488 Roboto-Thin.ttf
+10/03/2024  17:49           172,860 Roboto-ThinItalic.ttf
+              31 File(s)      5,685,344 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\public\images
+
+09/03/2024  19:06    <DIR>          .
+09/03/2024  19:06    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src
+
+10/03/2024  17:49    <DIR>          .
+10/03/2024  17:49    <DIR>          ..
+29/02/2024  16:27    <DIR>          actions
+26/02/2024  12:58    <DIR>          app
+10/03/2024  18:22               697 App.css
+10/03/2024  18:19               435 App.jsx
+11/03/2024  18:14    <DIR>          assets
+10/03/2024  18:58    <DIR>          components
+26/02/2024  13:03    <DIR>          features
+11/03/2024  11:17             1,802 index.css
+27/02/2024  22:43                60 input.css
+21/02/2024  18:50    <DIR>          lib
+26/02/2024  15:40               235 main.jsx
+08/03/2024  12:22    <DIR>          pages
+29/02/2024  16:27    <DIR>          reducers
+26/02/2024  13:01    <DIR>          services
+19/02/2024  20:26               508 store.js
+               6 File(s)          3,737 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\actions
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+23/02/2021  07:02             3,616 bookings.js
+16/12/2020  14:10                 0 messages.js
+06/01/2021  09:15               603 types.js
+08/01/2021  09:20             5,258 userActions.js
+               4 File(s)          9,477 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\app
+
+26/02/2024  12:58    <DIR>          .
+26/02/2024  12:58    <DIR>          ..
+26/02/2024  12:58                73 hooks.js
+26/02/2024  16:54               838 store.js
+               2 File(s)            911 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\assets
+
+11/03/2024  18:14    <DIR>          .
+11/03/2024  18:14    <DIR>          ..
+11/03/2024  18:37             5,833 fonts.css
+               1 File(s)          5,833 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components
+
+10/03/2024  18:58    <DIR>          .
+10/03/2024  18:58    <DIR>          ..
+29/02/2024  16:27    <DIR>          contacts
+13/03/2024  16:19    <DIR>          dashboard
+26/02/2024  13:10    <DIR>          layout
+29/02/2024  16:27    <DIR>          login
+26/02/2024  16:53    <DIR>          routes
+29/02/2024  16:27    <DIR>          settings
+29/02/2024  16:27    <DIR>          shad
+29/02/2024  16:27    <DIR>          tasks
+19/02/2024  19:57    <DIR>          templates
+15/03/2024  09:34    <DIR>          ui
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\contacts
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+11/11/2020  11:08               475 Activities.js
+22/02/2021  18:47             3,119 ExternalHotelForm.js
+               2 File(s)          3,594 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\dashboard
+
+13/03/2024  16:19    <DIR>          .
+13/03/2024  16:19    <DIR>          ..
+07/03/2024  02:05               283 AgentDashboard.jsx
+15/03/2024  10:20             5,091 AgentGallery.jsx
+14/03/2024  21:57             3,140 AnonDashboard.jsx
+11/03/2024  10:38               339 CustomerDashboard.jsx
+13/03/2024  16:44           208,400 in.svg
+16/03/2024  19:55            15,059 IndiaMap.jsx
+16/03/2024  12:21             3,004 RegionBoxFinder.jsx
+16/03/2024  13:32             2,709 RegionList.jsx
+16/03/2024  12:28            17,006 WeeklyHotelsAndItineraries.jsx
+               9 File(s)        255,031 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\layout
+
+26/02/2024  13:10    <DIR>          .
+26/02/2024  13:10    <DIR>          ..
+19/02/2024  19:57    <DIR>          header
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\layout\header
+
+19/02/2024  19:57    <DIR>          .
+19/02/2024  19:57    <DIR>          ..
+09/01/2021  10:59             2,555 HotelMenuDropDown.js
+09/01/2021  13:01             2,170 MainHeader.js
+09/01/2021  13:46             1,489 PageHeader.js
+09/01/2021  10:58             2,974 UserMenuDropDown.js
+               4 File(s)          9,188 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\login
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+19/01/2021  10:19               758 Login.js
+26/02/2024  12:40             1,936 LoginForm.js
+29/12/2020  22:15             2,405 SignUp.js
+               3 File(s)          5,099 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\routes
+
+26/02/2024  16:53    <DIR>          .
+26/02/2024  16:53    <DIR>          ..
+26/02/2024  22:03               772 PrivateRoute.jsx
+09/01/2021  13:20             2,632 RouteHelper.js
+05/03/2024  12:59               774 Routes.jsx
+               3 File(s)          4,178 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\settings
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+29/11/2020  14:54               533 Payments.js
+29/11/2020  15:29             1,186 Settings.js
+               2 File(s)          1,719 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\shad
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+21/02/2024  16:22             1,923 card.js
+               1 File(s)          1,923 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\tasks
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+10/11/2020  19:38                 4 Housekeeping.js
+10/11/2020  19:03                50 Rota.js
+22/02/2021  18:28             2,931 TaskForm.js
+31/12/2020  17:42               212 Tasks.js
+               4 File(s)          3,197 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\templates
+
+19/02/2024  19:57    <DIR>          .
+19/02/2024  19:57    <DIR>          ..
+10/01/2021  10:30             1,223 ModalFormContainer.js
+               1 File(s)          1,223 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\ui
+
+15/03/2024  09:34    <DIR>          .
+15/03/2024  09:34    <DIR>          ..
+09/03/2024  17:02             1,240 badge.jsx
+27/02/2024  08:45             1,966 button.jsx
+27/02/2024  08:45             1,585 card.jsx
+27/02/2024  08:25             5,039 carousel.jsx
+30/12/2020  19:03               207 Chunk.js
+01/03/2024  20:01             3,511 dialog.jsx
+28/02/2024  19:02             6,589 dropdown-menu.jsx
+26/02/2024  13:22    <DIR>          form
+15/03/2024  11:42             2,750 Gallery.jsx
+15/03/2024  09:34             5,234 Header.jsx
+16/03/2024  12:26    <DIR>          icons
+27/02/2024  08:46               759 input.jsx
+27/02/2024  08:46               541 label.jsx
+07/01/2021  08:10             2,104 MenuDropDown.js
+09/01/2021  12:32             2,247 MenuDropDownWithIcons.js
+01/03/2024  10:05               347 Modal.js
+09/01/2021  19:26             1,018 PrimaryButton.js
+28/02/2024  19:03             5,016 select.jsx
+              16 File(s)         40,153 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\ui\form
+
+26/02/2024  13:22    <DIR>          .
+26/02/2024  13:22    <DIR>          ..
+17/01/2021  20:50             3,019 AutoCompleteSuggestion.js
+31/12/2020  17:41             2,391 AutoCompleteSuggestionNoProps.js
+03/01/2021  08:49                 0 CheckBox.js
+12/01/2021  11:54               668 CollapsibleBasic.js
+12/01/2021  10:07               977 CollapsibleForm.js
+13/01/2021  11:01             2,046 DropDownSelect.js
+20/02/2021  12:45             2,288 FileInput.js
+12/01/2021  13:55               464 Form.js
+18/03/2023  10:26               913 FormGrid.js
+15/01/2021  02:21               684 GeneralButton.js
+12/01/2021  13:31                97 Hotels.code-workspace
+22/02/2021  12:18               440 Input.js
+19/02/2024  19:57    <DIR>          modal
+12/01/2021  13:26               692 PrimaryFormButton.js
+21/02/2021  14:57               325 ReadOnlyInput.js
+10/01/2021  10:14             1,226 SingleDatePicker.js
+10/01/2021  10:13               716 TimePicker.js
+19/01/2021  18:10             1,064 UploadButton.js
+              17 File(s)         18,010 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\ui\form\modal
+
+19/02/2024  19:57    <DIR>          .
+19/02/2024  19:57    <DIR>          ..
+18/03/2023  10:26             1,770 Modal.js
+               1 File(s)          1,770 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\components\ui\icons
+
+16/03/2024  12:26    <DIR>          .
+16/03/2024  12:26    <DIR>          ..
+16/03/2024  12:13               570 AppleIcon.jsx
+16/03/2024  12:27               590 BirdIcon.jsx
+15/03/2024  10:19               681 CastleIcon.jsx
+15/03/2024  10:19               392 ChevronLeftIcon.jsx
+15/03/2024  10:19               392 ChevronRightIcon.jsx
+16/03/2024  12:27               391 CircleIcon.jsx
+16/03/2024  12:21               419 CloudIcon.jsx
+16/03/2024  11:32               518 CloudRainIcon.jsx
+16/03/2024  12:21               610 CloudSnowIcon.jsx
+16/03/2024  11:33               613 CloudSunIcon.jsx
+15/03/2024  10:18               508 HeartIcon.jsx
+16/03/2024  13:34             1,034 index.js
+16/03/2024  12:15             1,247 InstagramIcon.jsx
+16/03/2024  11:58               664 LoadingPlaceholder.jsx
+15/03/2024  10:18               399 MountainIcon.jsx
+15/03/2024  10:18               470 StarIcon.jsx
+16/03/2024  12:21               667 SunIcon.jsx
+16/03/2024  12:28               688 TractorIcon.jsx
+15/03/2024  10:18               610 TreesIcon.jsx
+              19 File(s)         11,463 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\features
+
+26/02/2024  13:03    <DIR>          .
+26/02/2024  13:03    <DIR>          ..
+26/02/2024  13:03    <DIR>          agents
+28/02/2024  17:40    <DIR>          auth
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\features\agents
+
+26/02/2024  13:03    <DIR>          .
+26/02/2024  13:03    <DIR>          ..
+21/02/2024  13:06             2,384 EmailSubscribe.js
+21/02/2024  16:39            11,400 Profile.js
+               2 File(s)         13,784 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\features\auth
+
+28/02/2024  17:40    <DIR>          .
+28/02/2024  17:40    <DIR>          ..
+05/03/2024  13:15             2,589 authSlice.js
+05/03/2024  13:29    <DIR>          components
+26/02/2024  13:00                 0 useAuthHook.js
+               2 File(s)          2,589 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\features\auth\components
+
+05/03/2024  13:29    <DIR>          .
+05/03/2024  13:29    <DIR>          ..
+26/02/2024  13:23             1,076 AutoLogin.js
+05/03/2024  12:36             2,427 countries.js
+05/03/2024  13:39               113 interests.js
+26/02/2024  13:23               763 Login.js
+03/03/2024  16:30             4,406 LoginComponent.jsx
+05/03/2024  13:45             4,707 ModalLogin.jsx
+05/03/2024  23:06             5,786 Subscribe.jsx
+               7 File(s)         19,278 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\lib
+
+21/02/2024  18:50    <DIR>          .
+21/02/2024  18:50    <DIR>          ..
+26/02/2024  17:34               135 utils.js
+               1 File(s)            135 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\pages
+
+08/03/2024  12:22    <DIR>          .
+08/03/2024  12:22    <DIR>          ..
+16/03/2024  12:22             1,447 Dashboard.jsx
+               1 File(s)          1,447 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\reducers
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+28/12/2020  08:15             1,543 bookings.js
+06/01/2021  21:45               361 errors.js
+30/11/2020  10:30             1,500 fullbookings.js
+17/12/2020  16:03               384 index.js
+07/01/2021  08:58             1,633 userSelect.js
+               5 File(s)          5,421 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\frontend\src\services
+
+26/02/2024  13:01    <DIR>          .
+26/02/2024  13:01    <DIR>          ..
+05/03/2024  22:59             3,760 api.js
+               1 File(s)          3,760 bytes
+
+     Total Files Listed:
+           11333 File(s)    158,330,788 bytes
+            4643 Dir(s)   6,390,677,504 bytes free

@@ -1,11 +1,15 @@
 from django.db import models
+from django.conf import settings
 from contacts.models import Contact
-from customers.models import  Agent
 from region.models import Region
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 # from modeltranslation.translator import register, TranslationOptions (Is Creating an error with AppRegistry. Get this fixed)
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class Hotel(models.Model):
     name = models.CharField(max_length=100)
@@ -50,7 +54,7 @@ class PaymentType(models.Model):
 
 class CustomizedHotel(Hotel):
 
-    hotel_owner = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='owned_customized_hotels')
+    hotel_owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_customized_hotels')
     instagram_link = models.URLField(null=True, blank=True)
     pet_friendly = models.BooleanField(default=False)
     wheelchair_accessible = models.BooleanField(default=False)
@@ -69,13 +73,13 @@ class CustomizedHotel(Hotel):
 
     
 class AgentHotel(Hotel):
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='customized_hotels')
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customized_hotels')
     parent_hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, blank=True, related_name='agent_hotels')
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
     tac_percentage = models.DecimalField(max_digits=5, decimal_places=2, help_text="Commission percentage for this hotel")
 
-    def create_from_existing_hotel(cls, agent_id, hotel_id):
-        agent = Agent.objects.get(id=agent_id)
+    def create_from_existing_hotel(cls, user_id, hotel_id):
+        agent = User.objects.get(id=user_id)
         parent_hotel = Hotel.objects.filter(id=hotel_id, is_active=True).first()
     
         if not parent_hotel:
@@ -184,7 +188,7 @@ class RoomPrice(models.Model):
         ('AP', 'American Plan - With all meals'),
     ]
     hotel_room = models.ForeignKey(HotelRoom, on_delete=models.CASCADE)
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     meal_plan = models.CharField(max_length=100, choices=MEAL_PLAN_CHOICES)
 
     # Rack rates (before commission)

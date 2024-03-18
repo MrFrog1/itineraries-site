@@ -1,0 +1,1037 @@
+ Volume in drive C is Local Disk
+ Volume Serial Number is 4A1D-5A93
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins
+
+17/03/2024  10:32    <DIR>          .
+17/03/2024  10:32    <DIR>          ..
+02/01/2024  11:49    <DIR>          components
+05/01/2024  12:19    <DIR>          contacts
+24/02/2024  15:16    <DIR>          customers
+25/01/2024  17:12         1,011,712 db.sqlite3
+02/01/2024  12:30    <DIR>          db_changes
+17/03/2024  10:32                 0 dir.txt
+11/01/2024  12:09    <DIR>          forum
+17/02/2024  20:43    <DIR>          frontend
+03/01/2024  10:35    <DIR>          hotels
+06/01/2024  00:23    <DIR>          itineraries
+07/01/2024  20:05    <DIR>          itins
+11/11/2023  21:57               683 manage.py
+25/01/2024  15:49    <DIR>          maps
+04/01/2024  23:05    <DIR>          media
+27/12/2023  16:34    <DIR>          messages_user
+05/01/2024  13:44    <DIR>          region
+05/01/2024  14:50    <DIR>          reviews
+29/12/2023  17:47    <DIR>          user_feed
+25/01/2024  16:49    <DIR>          waypoints
+               3 File(s)      1,012,395 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components
+
+02/01/2024  11:49    <DIR>          .
+02/01/2024  11:49    <DIR>          ..
+26/12/2023  22:35                66 admin.py
+05/01/2024  11:52             3,023 api.py
+26/12/2023  22:35               158 apps.py
+02/01/2024  16:19    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+23/02/2024  13:55             4,900 models.py
+02/01/2024  12:29             4,168 serializers.py
+26/12/2023  22:37    <DIR>          static
+26/12/2023  22:35                63 tests.py
+02/01/2024  11:51                66 views.py
+26/12/2023  22:35                 0 __init__.py
+23/02/2024  15:42    <DIR>          __pycache__
+               8 File(s)         12,444 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components\endpoints
+
+02/01/2024  16:19    <DIR>          .
+02/01/2024  16:19    <DIR>          ..
+02/01/2024  12:29               199 component.py
+02/01/2024  12:29               207 component_type.py
+02/01/2024  16:19    <DIR>          __pycache__
+               2 File(s)            406 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components\endpoints\__pycache__
+
+02/01/2024  16:19    <DIR>          .
+02/01/2024  16:19    <DIR>          ..
+02/01/2024  16:19               372 component.cpython-38.pyc
+02/01/2024  16:19               381 component_type.cpython-38.pyc
+               2 File(s)            753 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             2,755 0001_initial.py
+05/03/2024  20:05             1,391 0002_initial.py
+26/12/2023  22:35                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               3 File(s)          4,146 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,700 0001_initial.cpython-38.pyc
+05/03/2024  20:05             1,074 0002_initial.cpython-38.pyc
+05/03/2024  20:05               171 __init__.cpython-38.pyc
+               3 File(s)          2,945 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components\static
+
+26/12/2023  22:37    <DIR>          .
+26/12/2023  22:37    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\components\__pycache__
+
+23/02/2024  15:42    <DIR>          .
+23/02/2024  15:42    <DIR>          ..
+26/12/2023  22:44               201 admin.cpython-38.pyc
+05/01/2024  12:15             3,119 api.cpython-38.pyc
+26/12/2023  22:44               445 apps.cpython-38.pyc
+23/02/2024  15:42             3,047 models.cpython-38.pyc
+02/01/2024  16:19             3,385 serializers.cpython-38.pyc
+26/12/2023  22:44               160 __init__.cpython-38.pyc
+               6 File(s)         10,357 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts
+
+05/01/2024  12:19    <DIR>          .
+05/01/2024  12:19    <DIR>          ..
+26/12/2023  22:36                66 admin.py
+05/01/2024  12:19               796 api.py
+26/12/2023  22:36               154 apps.py
+02/01/2024  16:19    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+23/02/2024  13:55             2,004 models.py
+05/01/2024  12:19               226 permissions.py
+05/01/2024  12:26             2,432 serializers.py
+26/12/2023  22:37    <DIR>          static
+26/12/2023  22:36                63 tests.py
+02/01/2024  12:01                66 views.py
+26/12/2023  22:36                 0 __init__.py
+23/02/2024  15:42    <DIR>          __pycache__
+               9 File(s)          5,807 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts\endpoints
+
+02/01/2024  16:19    <DIR>          .
+02/01/2024  16:19    <DIR>          ..
+02/01/2024  15:59               191 contact.py
+02/01/2024  15:58               217 contact_business.py
+02/01/2024  15:59               217 contact_category.py
+02/01/2024  16:19    <DIR>          __pycache__
+               3 File(s)            625 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts\endpoints\__pycache__
+
+02/01/2024  16:19    <DIR>          .
+02/01/2024  16:19    <DIR>          ..
+02/01/2024  16:19               362 contact.cpython-38.pyc
+02/01/2024  16:19               389 contact_business.cpython-38.pyc
+02/01/2024  16:19               389 contact_category.cpython-38.pyc
+               3 File(s)          1,140 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,959 0001_initial.py
+05/03/2024  20:05             1,463 0002_initial.py
+26/12/2023  22:36                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               3 File(s)          3,422 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,451 0001_initial.cpython-38.pyc
+05/03/2024  20:05             1,079 0002_initial.cpython-38.pyc
+05/03/2024  20:05               169 __init__.cpython-38.pyc
+               3 File(s)          2,699 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts\static
+
+26/12/2023  22:37    <DIR>          .
+26/12/2023  22:37    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\contacts\__pycache__
+
+23/02/2024  15:42    <DIR>          .
+23/02/2024  15:42    <DIR>          ..
+26/12/2023  22:44               199 admin.cpython-38.pyc
+05/01/2024  12:25             1,211 api.cpython-38.pyc
+26/12/2023  22:44               439 apps.cpython-38.pyc
+23/02/2024  15:42             2,272 models.cpython-38.pyc
+05/01/2024  12:25               604 permissions.cpython-38.pyc
+05/01/2024  12:51             2,395 serializers.cpython-38.pyc
+26/12/2023  22:44               158 __init__.cpython-38.pyc
+               7 File(s)          7,278 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers
+
+24/02/2024  15:16    <DIR>          .
+24/02/2024  15:16    <DIR>          ..
+26/12/2023  22:36                66 admin.py
+05/03/2024  13:41             3,250 api.py
+26/12/2023  22:36               156 apps.py
+29/02/2024  16:27    <DIR>          endpoints
+05/03/2024  22:43    <DIR>          migrations
+05/03/2024  22:47             4,482 models.py
+22/02/2024  15:11             1,934 permissions.py
+05/03/2024  22:57             9,573 serializers.py
+26/12/2023  22:37    <DIR>          static
+24/02/2024  16:07    <DIR>          tests
+26/12/2023  22:36                63 tests.py
+25/02/2024  13:18             2,166 views.py
+24/02/2024  16:02                 0 __init__.py
+05/03/2024  22:57    <DIR>          __pycache__
+               9 File(s)         21,690 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\endpoints
+
+29/02/2024  16:27    <DIR>          .
+29/02/2024  16:27    <DIR>          ..
+02/01/2024  16:02               194 customer.py
+24/02/2024  18:19               182 user.py
+24/02/2024  18:20    <DIR>          __pycache__
+               2 File(s)            376 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\endpoints\__pycache__
+
+24/02/2024  18:20    <DIR>          .
+24/02/2024  18:20    <DIR>          ..
+02/01/2024  16:19               357 agent.cpython-38.pyc
+02/01/2024  16:19               366 customer.cpython-38.pyc
+24/02/2024  18:20               354 user.cpython-38.pyc
+               3 File(s)          1,077 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\migrations
+
+05/03/2024  22:43    <DIR>          .
+05/03/2024  22:43    <DIR>          ..
+05/03/2024  20:05             6,722 0001_initial.py
+05/03/2024  22:41               416 0002_user_country.py
+05/03/2024  22:43               353 0003_remove_customerprofile_location.py
+26/12/2023  22:36                 0 __init__.py
+05/03/2024  22:43    <DIR>          __pycache__
+               4 File(s)          7,491 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\migrations\__pycache__
+
+05/03/2024  22:43    <DIR>          .
+05/03/2024  22:43    <DIR>          ..
+05/03/2024  20:05             4,051 0001_initial.cpython-38.pyc
+05/03/2024  22:42               609 0002_user_country.cpython-38.pyc
+05/03/2024  22:43               559 0003_remove_customerprofile_location.cpython-38.pyc
+05/03/2024  20:05               170 __init__.cpython-38.pyc
+               4 File(s)          5,389 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\static
+
+26/12/2023  22:37    <DIR>          .
+26/12/2023  22:37    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\tests
+
+24/02/2024  16:07    <DIR>          .
+24/02/2024  16:07    <DIR>          ..
+25/02/2024  14:04             2,370 test_api.py
+24/02/2024  15:25               800 test_models.py
+25/02/2024  15:16             3,368 test_serializers.py
+24/02/2024  16:02               179 __init__.py
+25/02/2024  15:16    <DIR>          __pycache__
+               4 File(s)          6,717 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\tests\__pycache__
+
+25/02/2024  15:16    <DIR>          .
+25/02/2024  15:16    <DIR>          ..
+25/02/2024  14:04             2,335 test_api.cpython-38.pyc
+24/02/2024  16:07             1,267 test_models.cpython-38.pyc
+25/02/2024  15:16             2,962 test_serializers.cpython-38.pyc
+24/02/2024  16:07               340 __init__.cpython-38.pyc
+               4 File(s)          6,904 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\customers\__pycache__
+
+05/03/2024  22:57    <DIR>          .
+05/03/2024  22:57    <DIR>          ..
+26/12/2023  22:44               200 admin.cpython-38.pyc
+05/03/2024  13:41             3,370 api.cpython-38.pyc
+26/12/2023  22:44               442 apps.cpython-38.pyc
+05/03/2024  22:57             4,393 models.cpython-38.pyc
+23/02/2024  16:05             1,866 permissions.cpython-38.pyc
+05/03/2024  22:57             7,125 serializers.cpython-38.pyc
+24/02/2024  15:25               200 tests.cpython-38.pyc
+08/01/2024  08:05               203 views.cpython-38.pyc
+24/02/2024  16:03               159 __init__.cpython-38.pyc
+               9 File(s)         17,958 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\db_changes
+
+02/01/2024  12:30    <DIR>          .
+02/01/2024  12:30    <DIR>          ..
+31/12/2023  19:22                66 admin.py
+02/01/2024  16:35             1,251 api.py
+31/12/2023  19:22               157 apps.py
+02/01/2024  16:20    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+23/02/2024  14:08               480 models.py
+02/01/2024  13:24               291 serializers.py
+31/12/2023  19:22                63 tests.py
+31/12/2023  19:22                66 views.py
+31/12/2023  19:22                 0 __init__.py
+23/02/2024  15:59    <DIR>          __pycache__
+               8 File(s)          2,374 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\db_changes\endpoints
+
+02/01/2024  16:20    <DIR>          .
+02/01/2024  16:20    <DIR>          ..
+02/01/2024  16:00               196 db_changes.py
+02/01/2024  16:20    <DIR>          __pycache__
+               1 File(s)            196 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\db_changes\endpoints\__pycache__
+
+02/01/2024  16:20    <DIR>          .
+02/01/2024  16:20    <DIR>          ..
+02/01/2024  16:20               371 db_changes.cpython-38.pyc
+               1 File(s)            371 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\db_changes\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05               919 0001_initial.py
+31/12/2023  19:22                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)            919 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\db_changes\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,018 0001_initial.cpython-38.pyc
+05/03/2024  20:05               171 __init__.cpython-38.pyc
+               2 File(s)          1,189 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\db_changes\__pycache__
+
+23/02/2024  15:59    <DIR>          .
+23/02/2024  15:59    <DIR>          ..
+01/01/2024  11:57               201 admin.cpython-38.pyc
+02/01/2024  16:38             1,152 api.cpython-38.pyc
+01/01/2024  11:52               444 apps.cpython-38.pyc
+23/02/2024  15:59               825 models.cpython-38.pyc
+02/01/2024  16:32               687 serializers.cpython-38.pyc
+01/01/2024  11:52               160 __init__.cpython-38.pyc
+               6 File(s)          3,469 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\forum
+
+11/01/2024  12:09    <DIR>          .
+11/01/2024  12:09    <DIR>          ..
+11/01/2024  12:08                66 admin.py
+11/01/2024  12:08               148 apps.py
+05/03/2024  20:05    <DIR>          migrations
+23/02/2024  14:45             1,446 models.py
+11/01/2024  12:08                63 tests.py
+11/01/2024  12:08                66 views.py
+11/01/2024  12:08                 0 __init__.py
+23/02/2024  15:42    <DIR>          __pycache__
+               6 File(s)          1,789 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\forum\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             2,574 0001_initial.py
+11/01/2024  12:08                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)          2,574 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\forum\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,565 0001_initial.cpython-38.pyc
+05/03/2024  20:05               166 __init__.cpython-38.pyc
+               2 File(s)          1,731 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\forum\__pycache__
+
+23/02/2024  15:42    <DIR>          .
+23/02/2024  15:42    <DIR>          ..
+11/01/2024  12:09               196 admin.cpython-38.pyc
+11/01/2024  12:09               430 apps.cpython-38.pyc
+23/02/2024  15:42             2,043 models.cpython-38.pyc
+11/01/2024  12:09               155 __init__.cpython-38.pyc
+               4 File(s)          2,824 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\frontend
+
+17/02/2024  20:43    <DIR>          .
+17/02/2024  20:43    <DIR>          ..
+04/02/2024  23:46                66 admin.py
+04/02/2024  23:46               154 apps.py
+05/03/2024  20:05    <DIR>          migrations
+04/02/2024  23:46                60 models.py
+07/02/2024  22:32    <DIR>          static
+04/02/2024  23:46                63 tests.py
+06/02/2024  13:37                99 urls.py
+07/02/2024  22:29                99 views.py
+04/02/2024  23:46                 0 __init__.py
+08/02/2024  22:22    <DIR>          __pycache__
+               7 File(s)            541 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\frontend\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+04/02/2024  23:46                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               1 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\frontend\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05               169 __init__.cpython-38.pyc
+               1 File(s)            169 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\frontend\static
+
+07/02/2024  22:32    <DIR>          .
+07/02/2024  22:32    <DIR>          ..
+07/02/2024  22:32    <DIR>          frontend
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\frontend\static\frontend
+
+07/02/2024  22:32    <DIR>          .
+07/02/2024  22:32    <DIR>          ..
+07/02/2024  22:32               662 main.js
+               1 File(s)            662 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\frontend\__pycache__
+
+08/02/2024  22:22    <DIR>          .
+08/02/2024  22:22    <DIR>          ..
+06/02/2024  12:37               199 admin.cpython-38.pyc
+06/02/2024  12:37               439 apps.cpython-38.pyc
+08/02/2024  22:22             1,038 middleware.cpython-38.pyc
+06/02/2024  12:37               196 models.cpython-38.pyc
+06/02/2024  13:37               272 urls.cpython-38.pyc
+07/02/2024  22:29               325 views.cpython-38.pyc
+06/02/2024  12:37               158 __init__.cpython-38.pyc
+               7 File(s)          2,627 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels
+
+03/01/2024  10:35    <DIR>          .
+03/01/2024  10:35    <DIR>          ..
+29/12/2023  05:31                66 admin.py
+04/01/2024  12:28             3,176 api.py
+29/12/2023  05:31               150 apps.py
+03/01/2024  20:38    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+23/02/2024  14:46            21,729 models.py
+04/01/2024  12:28             2,024 permissions.py
+06/01/2024  18:42             2,739 serializers.py
+29/12/2023  05:31    <DIR>          static
+29/12/2023  05:31                63 tests.py
+29/12/2023  05:31                66 views.py
+29/12/2023  05:31                 0 __init__.py
+23/02/2024  15:42    <DIR>          __pycache__
+               9 File(s)         30,013 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels\endpoints
+
+03/01/2024  20:38    <DIR>          .
+03/01/2024  20:38    <DIR>          ..
+03/01/2024  15:01               199 agent_hotels.py
+03/01/2024  15:01               214 customized_hotels.py
+03/01/2024  14:50               183 hotels.py
+03/01/2024  15:04               196 hotel_rooms.py
+03/01/2024  15:05               196 room_prices.py
+03/01/2024  20:38    <DIR>          __pycache__
+               5 File(s)            988 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels\endpoints\__pycache__
+
+03/01/2024  20:38    <DIR>          .
+03/01/2024  20:38    <DIR>          ..
+03/01/2024  20:38               370 agent_hotels.cpython-38.pyc
+03/01/2024  20:38               385 customized_hotels.cpython-38.pyc
+03/01/2024  20:38               353 hotels.cpython-38.pyc
+03/01/2024  20:38               367 hotel_rooms.cpython-38.pyc
+03/01/2024  20:38               367 room_prices.cpython-38.pyc
+               5 File(s)          1,842 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05            10,474 0001_initial.py
+29/12/2023  05:31                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)         10,474 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             5,232 0001_initial.cpython-38.pyc
+05/03/2024  20:05               167 __init__.cpython-38.pyc
+               2 File(s)          5,399 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels\static
+
+29/12/2023  05:31    <DIR>          .
+29/12/2023  05:31    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\hotels\__pycache__
+
+23/02/2024  15:42    <DIR>          .
+23/02/2024  15:42    <DIR>          ..
+29/12/2023  17:09               197 admin.cpython-38.pyc
+04/01/2024  14:19             3,448 api.cpython-38.pyc
+29/12/2023  16:59               433 apps.cpython-38.pyc
+23/02/2024  15:42            12,210 models.cpython-38.pyc
+04/01/2024  14:19             1,892 permissions.cpython-38.pyc
+08/01/2024  08:22             4,079 serializers.cpython-38.pyc
+29/12/2023  16:59               156 __init__.cpython-38.pyc
+               7 File(s)         22,415 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries
+
+06/01/2024  00:23    <DIR>          .
+06/01/2024  00:23    <DIR>          ..
+26/12/2023  19:07                66 admin.py
+06/01/2024  18:29             5,179 api.py
+02/01/2024  10:16               166 apps.py
+08/01/2024  08:22    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+23/02/2024  16:02            18,386 models.py
+06/01/2024  11:11             1,584 permissions.py
+02/03/2024  11:06             7,855 serializers.py
+26/12/2023  21:43    <DIR>          static
+26/12/2023  19:07                63 tests.py
+26/12/2023  19:07                66 views.py
+26/12/2023  19:07                 0 __init__.py
+02/03/2024  11:06    <DIR>          __pycache__
+               9 File(s)         33,365 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries\endpoints
+
+08/01/2024  08:22    <DIR>          .
+08/01/2024  08:22    <DIR>          ..
+06/01/2024  11:43               217 agent_itinerary.py
+06/01/2024  11:43               226 customer_itinerary.py
+06/01/2024  11:43               210 itinerary_day.py
+06/01/2024  11:43               238 itinerary_day_component.py
+06/01/2024  11:28               216 itinerary_group.py
+06/01/2024  11:28               225 itinerary_grouping.py
+08/01/2024  08:24    <DIR>          __pycache__
+               6 File(s)          1,332 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries\endpoints\__pycache__
+
+08/01/2024  08:24    <DIR>          .
+08/01/2024  08:24    <DIR>          ..
+08/01/2024  08:22               392 agent_itinerary.cpython-38.pyc
+08/01/2024  08:22               401 customer_itinerary.cpython-38.pyc
+08/01/2024  08:22               385 itinerary_day.cpython-38.pyc
+08/01/2024  08:22               414 itinerary_day_component.cpython-38.pyc
+08/01/2024  08:24               391 itinerary_group.cpython-38.pyc
+08/01/2024  08:24               400 itinerary_grouping.cpython-38.pyc
+               6 File(s)          2,383 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05            13,703 0001_initial.py
+26/12/2023  19:07                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)         13,703 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             6,246 0001_initial.cpython-38.pyc
+05/03/2024  20:05               172 __init__.cpython-38.pyc
+               2 File(s)          6,418 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries\static
+
+26/12/2023  21:43    <DIR>          .
+26/12/2023  21:43    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itineraries\__pycache__
+
+02/03/2024  11:06    <DIR>          .
+02/03/2024  11:06    <DIR>          ..
+26/12/2023  22:35               202 admin.cpython-38.pyc
+08/01/2024  08:22             5,083 api.cpython-38.pyc
+02/01/2024  12:23               448 apps.cpython-38.pyc
+23/02/2024  16:03            11,364 models.cpython-38.pyc
+08/01/2024  08:22             1,632 permissions.cpython-38.pyc
+02/03/2024  11:06             7,434 serializers.cpython-38.pyc
+26/12/2023  22:35               161 __init__.cpython-38.pyc
+               7 File(s)         26,324 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itins
+
+07/01/2024  20:05    <DIR>          .
+07/01/2024  20:05    <DIR>          ..
+11/11/2023  21:57               403 asgi.py
+11/03/2024  19:16             7,314 settings.py
+05/03/2024  13:40             3,475 urls.py
+24/02/2024  12:25             1,342 utils.py
+11/11/2023  21:57               403 wsgi.py
+11/11/2023  21:57                 0 __init__.py
+11/03/2024  19:16    <DIR>          __pycache__
+               6 File(s)         12,937 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\itins\__pycache__
+
+11/03/2024  19:16    <DIR>          .
+11/03/2024  19:16    <DIR>          ..
+11/03/2024  19:16             4,813 settings.cpython-38.pyc
+05/03/2024  13:41             3,122 urls.cpython-38.pyc
+22/02/2024  11:50               723 utils.cpython-38.pyc
+11/11/2023  21:58               554 wsgi.cpython-38.pyc
+11/11/2023  21:58               155 __init__.cpython-38.pyc
+               5 File(s)          9,367 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\maps
+
+25/01/2024  15:49    <DIR>          .
+25/01/2024  15:49    <DIR>          ..
+25/01/2024  15:48                66 admin.py
+25/01/2024  15:48               146 apps.py
+25/01/2024  15:48    <DIR>          migrations
+25/01/2024  15:48                60 models.py
+25/01/2024  15:48                63 tests.py
+25/01/2024  15:48                66 views.py
+25/01/2024  15:48                 0 __init__.py
+25/01/2024  15:49    <DIR>          __pycache__
+               6 File(s)            401 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\maps\migrations
+
+25/01/2024  15:48    <DIR>          .
+25/01/2024  15:48    <DIR>          ..
+25/01/2024  15:48                 0 __init__.py
+               1 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\maps\__pycache__
+
+25/01/2024  15:49    <DIR>          .
+25/01/2024  15:49    <DIR>          ..
+25/01/2024  15:49               154 __init__.cpython-38.pyc
+               1 File(s)            154 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media
+
+04/01/2024  23:05    <DIR>          .
+04/01/2024  23:05    <DIR>          ..
+26/12/2023  22:36                66 admin.py
+05/01/2024  12:54             2,895 api.py
+26/12/2023  22:36               148 apps.py
+04/01/2024  23:17    <DIR>          endpoints
+16/03/2024  19:17    <DIR>          migrations
+16/03/2024  19:17             3,738 models.py
+04/01/2024  16:11               308 permissions.py
+16/03/2024  19:20             3,172 serializers.py
+27/12/2023  14:11    <DIR>          static
+26/12/2023  22:36                63 tests.py
+26/12/2023  22:36                66 views.py
+26/12/2023  22:36                 0 __init__.py
+16/03/2024  19:21    <DIR>          __pycache__
+               9 File(s)         10,456 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media\endpoints
+
+04/01/2024  23:17    <DIR>          .
+04/01/2024  23:17    <DIR>          ..
+04/01/2024  23:17               181 photos.py
+04/01/2024  14:21               181 videos.py
+05/01/2024  12:15    <DIR>          __pycache__
+               2 File(s)            362 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media\endpoints\__pycache__
+
+05/01/2024  12:15    <DIR>          .
+05/01/2024  12:15    <DIR>          ..
+05/01/2024  12:15               350 photos.cpython-38.pyc
+04/01/2024  19:04               350 videos.cpython-38.pyc
+               2 File(s)            700 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media\migrations
+
+16/03/2024  19:17    <DIR>          .
+16/03/2024  19:17    <DIR>          ..
+05/03/2024  20:05             4,022 0001_initial.py
+16/03/2024  19:17               831 0002_auto_20240316_1917.py
+26/12/2023  22:36                 0 __init__.py
+16/03/2024  19:17    <DIR>          __pycache__
+               3 File(s)          4,853 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media\migrations\__pycache__
+
+16/03/2024  19:17    <DIR>          .
+16/03/2024  19:17    <DIR>          ..
+05/03/2024  20:05             2,519 0001_initial.cpython-38.pyc
+16/03/2024  19:17               759 0002_auto_20240316_1917.cpython-38.pyc
+05/03/2024  20:05               166 __init__.cpython-38.pyc
+               3 File(s)          3,444 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media\static
+
+27/12/2023  14:11    <DIR>          .
+27/12/2023  14:11    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\media\__pycache__
+
+16/03/2024  19:21    <DIR>          .
+16/03/2024  19:21    <DIR>          ..
+29/12/2023  17:09               196 admin.cpython-38.pyc
+08/01/2024  08:22             2,407 api.cpython-38.pyc
+29/12/2023  16:59               430 apps.cpython-38.pyc
+16/03/2024  19:17             2,899 models.cpython-38.pyc
+04/01/2024  19:04               658 permissions.cpython-38.pyc
+16/03/2024  19:21             2,900 serializers.cpython-38.pyc
+29/12/2023  16:59               155 __init__.cpython-38.pyc
+               7 File(s)          9,645 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\messages_user
+
+27/12/2023  16:34    <DIR>          .
+27/12/2023  16:34    <DIR>          ..
+27/12/2023  16:32                66 admin.py
+27/12/2023  16:32               163 apps.py
+27/12/2023  16:32    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+25/02/2024  14:04             3,008 models.py
+26/12/2023  21:44                 0 serializers.py
+27/12/2023  16:32    <DIR>          static
+27/12/2023  16:32                63 tests.py
+27/12/2023  16:32                66 views.py
+27/12/2023  16:32                 0 __init__.py
+25/02/2024  14:04    <DIR>          __pycache__
+               7 File(s)          3,366 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\messages_user\endpoints
+
+27/12/2023  16:32    <DIR>          .
+27/12/2023  16:32    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\messages_user\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             2,241 0001_initial.py
+27/12/2023  16:32                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)          2,241 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\messages_user\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,598 0001_initial.cpython-38.pyc
+05/03/2024  20:05               174 __init__.cpython-38.pyc
+               2 File(s)          1,772 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\messages_user\static
+
+27/12/2023  16:32    <DIR>          .
+27/12/2023  16:32    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\messages_user\__pycache__
+
+25/02/2024  14:04    <DIR>          .
+25/02/2024  14:04    <DIR>          ..
+27/12/2023  16:34               204 admin.cpython-38.pyc
+27/12/2023  16:34               453 apps.cpython-38.pyc
+25/02/2024  14:04             1,597 models.cpython-38.pyc
+27/12/2023  16:34               163 __init__.cpython-38.pyc
+               4 File(s)          2,417 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region
+
+05/01/2024  13:44    <DIR>          .
+05/01/2024  13:44    <DIR>          ..
+27/12/2023  13:35                66 admin.py
+05/01/2024  14:18               650 api.py
+27/12/2023  13:35               150 apps.py
+08/01/2024  08:22    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+05/01/2024  13:59             3,824 models.py
+05/01/2024  13:44               369 permissions.py
+05/01/2024  13:44               191 serializers.py
+27/12/2023  14:11    <DIR>          static
+27/12/2023  13:35                63 tests.py
+27/12/2023  13:35                66 views.py
+27/12/2023  13:35                 0 __init__.py
+08/01/2024  08:22    <DIR>          __pycache__
+               9 File(s)          5,379 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region\endpoints
+
+08/01/2024  08:22    <DIR>          .
+08/01/2024  08:22    <DIR>          ..
+05/01/2024  14:19               186 regions.py
+08/01/2024  08:22    <DIR>          __pycache__
+               1 File(s)            186 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region\endpoints\__pycache__
+
+08/01/2024  08:22    <DIR>          .
+08/01/2024  08:22    <DIR>          ..
+08/01/2024  08:22               356 regions.cpython-38.pyc
+               1 File(s)            356 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             5,324 0001_initial.py
+27/12/2023  13:35                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)          5,324 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             2,380 0001_initial.cpython-38.pyc
+05/03/2024  20:05               167 __init__.cpython-38.pyc
+               2 File(s)          2,547 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region\static
+
+27/12/2023  14:11    <DIR>          .
+27/12/2023  14:11    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\region\__pycache__
+
+08/01/2024  08:22    <DIR>          .
+08/01/2024  08:22    <DIR>          ..
+27/12/2023  14:05               197 admin.cpython-38.pyc
+08/01/2024  08:22               806 api.cpython-38.pyc
+27/12/2023  14:05               433 apps.cpython-38.pyc
+08/01/2024  07:38             2,993 models.cpython-38.pyc
+08/01/2024  08:22               720 permissions.cpython-38.pyc
+08/01/2024  08:22               620 serializers.cpython-38.pyc
+27/12/2023  14:05               156 __init__.cpython-38.pyc
+               7 File(s)          5,925 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews
+
+05/01/2024  14:50    <DIR>          .
+05/01/2024  14:50    <DIR>          ..
+27/12/2023  15:35                66 admin.py
+05/01/2024  15:26               564 api.py
+27/12/2023  15:35               152 apps.py
+08/01/2024  08:22    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+25/02/2024  12:09             1,753 models.py
+05/01/2024  16:07               383 permissions.py
+05/01/2024  14:49               364 serializers.py
+27/12/2023  15:36    <DIR>          static
+27/12/2023  15:35                63 tests.py
+27/12/2023  15:35                66 views.py
+27/12/2023  15:35                 0 __init__.py
+25/02/2024  12:11    <DIR>          __pycache__
+               9 File(s)          3,411 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews\endpoints
+
+08/01/2024  08:22    <DIR>          .
+08/01/2024  08:22    <DIR>          ..
+05/01/2024  15:29               187 review.py
+08/01/2024  08:22    <DIR>          __pycache__
+               1 File(s)            187 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews\endpoints\__pycache__
+
+08/01/2024  08:22    <DIR>          .
+08/01/2024  08:22    <DIR>          ..
+08/01/2024  08:22               357 review.cpython-38.pyc
+               1 File(s)            357 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             2,134 0001_initial.py
+27/12/2023  15:35                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)          2,134 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,687 0001_initial.cpython-38.pyc
+05/03/2024  20:05               168 __init__.cpython-38.pyc
+               2 File(s)          1,855 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews\static
+
+27/12/2023  15:36    <DIR>          .
+27/12/2023  15:36    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\reviews\__pycache__
+
+25/02/2024  12:11    <DIR>          .
+25/02/2024  12:11    <DIR>          ..
+27/12/2023  16:32               198 admin.cpython-38.pyc
+08/01/2024  08:22               942 api.cpython-38.pyc
+27/12/2023  16:21               436 apps.cpython-38.pyc
+25/02/2024  12:11             1,678 models.cpython-38.pyc
+08/01/2024  08:22               751 permissions.cpython-38.pyc
+08/01/2024  08:22               790 serializers.cpython-38.pyc
+27/12/2023  16:21               157 __init__.cpython-38.pyc
+               7 File(s)          4,952 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\user_feed
+
+29/12/2023  17:47    <DIR>          .
+29/12/2023  17:47    <DIR>          ..
+29/12/2023  17:09                66 admin.py
+29/12/2023  17:09               155 apps.py
+29/12/2023  17:09    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+24/02/2024  12:27             1,289 models.py
+26/12/2023  21:44                 0 serializers.py
+29/12/2023  17:09    <DIR>          static
+29/12/2023  17:09                63 tests.py
+29/12/2023  17:09                66 views.py
+29/12/2023  17:09                 0 __init__.py
+24/02/2024  12:27    <DIR>          __pycache__
+               7 File(s)          1,639 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\user_feed\endpoints
+
+29/12/2023  17:09    <DIR>          .
+29/12/2023  17:09    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\user_feed\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             2,542 0001_initial.py
+29/12/2023  17:09                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)          2,542 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\user_feed\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,531 0001_initial.cpython-38.pyc
+05/03/2024  20:05               170 __init__.cpython-38.pyc
+               2 File(s)          1,701 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\user_feed\static
+
+29/12/2023  17:09    <DIR>          .
+29/12/2023  17:09    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\user_feed\__pycache__
+
+24/02/2024  12:27    <DIR>          .
+24/02/2024  12:27    <DIR>          ..
+29/12/2023  17:48               200 admin.cpython-38.pyc
+29/12/2023  17:47               441 apps.cpython-38.pyc
+24/02/2024  12:27             1,307 models.cpython-38.pyc
+29/12/2023  17:47               159 __init__.cpython-38.pyc
+               4 File(s)          2,107 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\waypoints
+
+25/01/2024  16:49    <DIR>          .
+25/01/2024  16:49    <DIR>          ..
+25/01/2024  15:49                66 admin.py
+25/01/2024  16:13               313 api.py
+25/01/2024  15:49               156 apps.py
+25/01/2024  17:01    <DIR>          endpoints
+05/03/2024  20:05    <DIR>          migrations
+25/01/2024  16:23             1,742 models.py
+25/01/2024  16:13               339 serializers.py
+25/01/2024  15:49                63 tests.py
+25/01/2024  15:49                66 views.py
+25/01/2024  15:49                 0 __init__.py
+25/01/2024  17:01    <DIR>          __pycache__
+               8 File(s)          2,745 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\waypoints\endpoints
+
+25/01/2024  17:01    <DIR>          .
+25/01/2024  17:01    <DIR>          ..
+25/01/2024  16:12               195 waypoints.py
+25/01/2024  17:01    <DIR>          __pycache__
+               1 File(s)            195 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\waypoints\endpoints\__pycache__
+
+25/01/2024  17:01    <DIR>          .
+25/01/2024  17:01    <DIR>          ..
+25/01/2024  17:01               368 waypoints.cpython-38.pyc
+               1 File(s)            368 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\waypoints\migrations
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,498 0001_initial.py
+25/01/2024  15:49                 0 __init__.py
+05/03/2024  20:05    <DIR>          __pycache__
+               2 File(s)          1,498 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\waypoints\migrations\__pycache__
+
+05/03/2024  20:05    <DIR>          .
+05/03/2024  20:05    <DIR>          ..
+05/03/2024  20:05             1,298 0001_initial.cpython-38.pyc
+05/03/2024  20:05               170 __init__.cpython-38.pyc
+               2 File(s)          1,468 bytes
+
+ Directory of C:\Users\rajto\OneDrive\itineraries-site\itins\waypoints\__pycache__
+
+25/01/2024  17:01    <DIR>          .
+25/01/2024  17:01    <DIR>          ..
+25/01/2024  17:01               200 admin.cpython-38.pyc
+25/01/2024  17:01               547 api.cpython-38.pyc
+25/01/2024  16:49               442 apps.cpython-38.pyc
+25/01/2024  17:01             1,841 models.cpython-38.pyc
+25/01/2024  17:01               769 serializers.cpython-38.pyc
+25/01/2024  16:49               159 __init__.cpython-38.pyc
+               6 File(s)          3,958 bytes
+
+     Total Files Listed:
+             346 File(s)      1,421,059 bytes
+             293 Dir(s)   6,390,521,856 bytes free

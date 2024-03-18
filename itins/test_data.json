@@ -1,0 +1,60 @@
+{
+  "regions": [
+    {
+      "description": "Ladakh",
+      "january_min_temperature": -5,
+      "january_max_temperature": 5,
+      "february_min_temperature": -2,
+      "february_max_temperature": 8,
+      "january_weather": "sunny",
+      "february_weather": "sunny_and_cloudy"
+    },
+    {
+      "description": "Rajasthan",
+      "january_min_temperature": 10,
+      "january_max_temperature": 25,
+      "february_min_temperature": 15,
+      "february_max_temperature": 30,
+      "january_weather": "sunny",
+      "february_weather": "sunny"
+    }
+  ],
+  "hotels": [
+    {
+      "name": "Grand View Hotel",
+      "description": "Stunning beachfront hotel with panoramic ocean views.",
+      "platform_hotel": true,
+      "region_id": 1,
+      "rating": 4,
+      "min_price_in_INR": 5000
+    },
+    {
+      "name": "Tranquil Oasis Resort",
+      "description": "Luxurious spa retreat nestled in a serene tropical paradise.",
+      "platform_hotel": true,
+      "region_id": 2,
+      "rating": 5,
+      "min_price_in_INR": 8000
+    }
+  ],
+  "itineraries": [
+    {
+      "name": "Historic Sites Tour",
+      "region_id": 1,
+      "agent_id": 1,
+      "category": "history",
+      "customisable": true,
+      "cost_for_1_pax": 1000,
+      "cost_for_2_pax": 1800
+    },
+    {
+      "name": "Wildlife Safari",
+      "region_id": 2,
+      "agent_id": 2,
+      "category": "wildlife",
+      "customisable": true,
+      "cost_for_1_pax": 1500,
+      "cost_for_2_pax": 2500
+    }
+  ]
+}

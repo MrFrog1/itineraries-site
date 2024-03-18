@@ -1,0 +1,88 @@
+import React, {useState} from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import { Link } from "react-router-dom";
+
+
+// This gives a Menu DropDown 
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
+  }
+}));
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+
+const MenuDropDown = (props) => {
+  const { items ,menuIcon, other, dispatch, ...rest } = props; 
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const styles = useStyles();
+
+  const handleClick = (event) => {
+    console.log(other)
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <IconButton
+        {...rest}
+        aria-controls="customized-menu"
+        aria-haspopup="true"
+        variant="contained"
+        onClick={handleClick}
+      >
+          {menuIcon}
+      </IconButton>
+      <StyledMenu
+        id="customized-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        {items.map(item => (
+          <MenuItem button component={Link} key={`dropdown-${item.name}`} to={item.link} className={styles.root}>
+            <ListItemText primary={item.name} />
+          </MenuItem>
+
+        ))}
+      </StyledMenu>
+    </div>
+  );
+}
+
+export default MenuDropDown;

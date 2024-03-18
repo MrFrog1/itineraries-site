@@ -10,23 +10,23 @@ Function views
 Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
+Including another URLconf 
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework_simplejwt.views import TokenRefreshView
-from customers.api import MyTokenObtainPairView, RegisterView, getProfile, updateProfile
+from customers.api import MyTokenObtainPairView, CustomerRegisterView, current_user  # Adjusted import
+from django.views.generic import TemplateView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('profile/', getProfile, name='get_profile'),
-    path('profile/update/', updateProfile, name='update_profile'),
+    path('register/', CustomerRegisterView.as_view(), name='register'),
+    path('profile/', current_user, name='current_user'),  # Combined URL for getting and updating profile
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
 
 # Endpoints
     path('api/components/components', include('components.endpoints.component')),
@@ -34,8 +34,7 @@ urlpatterns = [
     path('api/contacts/contact_businesses', include('contacts.endpoints.contact_business')),
     path('api/contacts/contacts', include('contacts.endpoints.contact')),
     path('api/contacts/contact_categories', include('contacts.endpoints.contact_category')),
-    path('api/customers/customer', include('customers.endpoints.customer')),
-    path('api/customers/agent', include('customers.endpoints.agent')),
+    path('api/user', include('customers.endpoints.user')),
     path('api/db_changes', include('db_changes.endpoints.db_changes')),
 
     path('api/hotels', include('hotels.endpoints.hotels')),
@@ -61,7 +60,7 @@ urlpatterns = [
     path('api/itineraries/itinerary.groupings', include('itineraries.endpoints.itinerary_grouping')),
 
 
-    path('', include('frontend.urls')),
-    re_path(r'^(?:.*)?', include('frontend.urls'))
+    # path('', include('frontend.urls')),
+    re_path(r'^(?:.*)?', TemplateView.as_view(template_name="base.html"),)
 
 ]

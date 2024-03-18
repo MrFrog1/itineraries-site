@@ -9,16 +9,21 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 import inspect
-from .utils import custom_jwt_response_handler  # Adjust the import based on your project structure
 from datetime import timedelta
 
+# Needed for 'debug' to be available inside templates.
+# https://docs.djangoproject.com/en/3.2/ref/templates/api/#django-template-context-processors-debug
+
+
+# Vite App Dir: point it to the folder your vite app is in.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+VITE_APP_DIR = os.path.join(BASE_DIR, "frontend")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -29,7 +34,9 @@ SECRET_KEY = 'django-insecure-t#!bqo7#49b4)trixo%tfb+-b##9(hw)7u+8dzw$f)ncfsck3r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# This is where you put your domain
+# Like this ALLOWED_HOSTS = ['your-production-domain.com']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -64,9 +71,9 @@ INSTALLED_APPS = [
 ]
 
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,7 +89,7 @@ ROOT_URLCONF = 'itins.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR / "frontend/html")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,8 +115,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'customers.Agent'
-AUTH_USER_MODEL = 'customers.Customer'
+AUTH_USER_MODEL = 'customers.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -130,9 +136,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+REST_FRAMEWORK = {
+    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%dT%H:%M:%S.%fZ'],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=50),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
@@ -180,9 +197,47 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(VITE_APP_DIR, "dist"),
+    os.path.join(VITE_APP_DIR, "public"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+MIME_TYPES = {
+    'ttf': 'application/x-font-ttf',
+    'otf': 'application/x-font-opentype',
+    'woff': 'application/font-woff',
+    'woff2': 'application/font-woff2',
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS = True
+# Development
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://localhost:5173",
+        # Add your frontend's origin in development
+    # Add other domains as needed
+]
+
+INTERNAL_IPS = {
+    'localhost',
+    '127.0.0.1',
+}
+
+# IMPORTANT
+#  Just ensure that your Django backend and frontend are served over HTTPS in production to secure cookies.
+# In production, ensure your Django application is secure:
+
+# Set DEBUG = False.
+# Configure ALLOWED_HOSTS with your domain(s).
+# Use HTTPS in production to secure cookies and traffic.
+# Set SECURE_SSL_REDIRECT = True to redirect all non-HTTPS requests to HTTPS.
+# Set SESSION_COOKIE_SECURE = True and CSRF_COOKIE_SECURE = True to ensure cookies are sent over HTTPS.
+# Consider setting SECURE_HSTS_SECONDS, SECURE_HSTS_INCLUDE_SUBDOMAINS, and SECURE_HSTS_PRELOAD for added security, but be aware of their implications.

@@ -2,22 +2,26 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status, permissions, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .models import Agent, Customer
-from .serializers import AgentSerializer, CustomerSerializer, MyTokenObtainPairSerializer, RegisterSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import UserSerializer, MyTokenObtainPairSerializer, CustomerRegisterSerializer
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsOwnerOrAdmin
+from .permissions import IsOwnerOrReadOnly
+from django.conf import settings
 
-User = get_user_model()  # Get the custom user model
 
-class AgentViewSet(viewsets.ModelViewSet):
-    queryset = Agent.objects.all()
-    serializer_class = AgentSerializer
+UserModel = get_user_model()  # Get the custom user model
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = UserModel.objects.all()
+    serializer_class = UserSerializer
 
     def get_permissions(self):
+        # Simplified for demonstration; adjust according to your permission requirements
         if self.action in ['update', 'partial_update', 'destroy']:
-            return [IsAuthenticated(), IsOwnerOrAdmin()]
-        return [IsAuthenticated()]
+            permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+        else:
+            permission_classes = [permissions.AllowAny]
+        return [permission() for permission in permission_classes]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -25,40 +29,38 @@ class AgentViewSet(viewsets.ModelViewSet):
         return context
 
     def update(self, request, *args, **kwargs):
-        # Only allow admin users to update the admin_description field
-        if 'admin_description' in request.data and not request.user.is_staff:
-            return Response({'detail': 'You do not have permission to update this field.'}, status=status.HTTP_403_FORBIDDEN)
+        # Custom update logic if needed
         return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        # Only allow admin users to update the admin_description field
-        if 'admin_description' in request.data and not request.user.is_staff:
-            return Response({'detail': 'You do not have permission to update this field.'}, status=status.HTTP_403_FORBIDDEN)
+        # Custom partial_update logic if needed
         return super().partial_update(request, *args, **kwargs)
-
-
-class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
-
-    def get_queryset(self):
-        if self.action == 'list':
-            return Customer.objects.none()
-        return Customer.objects.all()
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({"request": self.request})
-        return context
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.AllowAny]
-    serializer_class = RegisterSerializer
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        data = response.data
+        refresh_token = data.pop('refresh', None)
+        
+        if refresh_token:
+            cookie_max_age = 3600 * 24 * 3  # 3 days
+            response.set_cookie(
+                'refresh_token',
+                refresh_token,
+                max_age=cookie_max_age,
+                httponly=True,
+                samesite='Strict',
+                secure=not settings.DEBUG  # Set to True in production
+            )
+        return response
 
+class CustomerRegisterView(generics.CreateAPIView):
+    queryset = UserModel.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CustomerRegisterSerializer
+ 
 @api_view(['GET', 'PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def current_user(request):
@@ -66,59 +68,15 @@ def current_user(request):
     Retrieve or update the current user's data.
     """
     user = request.user
-    if isinstance(user, Agent):
-        serializer_class = AgentSerializer
-    elif isinstance(user, Customer):
-        serializer_class = CustomerSerializer
-    else:
-        return Response({"error": "User type not recognized"}, status=status.HTTP_400_BAD_REQUEST)
+    serializer = UserSerializer(user, context={'request': request})
 
     if request.method == 'GET':
-        serializer = serializer_class(user)
         return Response(serializer.data)
+    
     elif request.method in ['PUT', 'PATCH']:
         partial = request.method == 'PATCH'
-        serializer = serializer_class(user, data=request.data, partial=partial)
+        serializer = UserSerializer(user, data=request.data, context={'request': request}, partial=partial)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def updateProfile(request):
-    """
-    Update the current user's profile.
-    """
-    user = request.user
-    if isinstance(user, Agent):
-        serializer_class = AgentSerializer
-    elif isinstance(user, Customer):
-        serializer_class = CustomerSerializer
-    else:
-        return Response({"error": "User type not recognized"}, status=status.HTTP_400_BAD_REQUEST)
-
-    serializer = serializer_class(user, data=request.data, partial=True)
-
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getProfile(request):
-    """
-    Retrieve the profile of the current user.
-    """
-    user = request.user
-    if hasattr(user, 'agent'):
-        serializer_class = AgentSerializer
-    elif hasattr(user, 'customer'):
-        serializer_class = CustomerSerializer
-    else:
-        return Response({"error": "User type not recognized"}, status=status.HTTP_400_BAD_REQUEST)
-
-    serializer = serializer_class(user)
-    return Response(serializer.data)
