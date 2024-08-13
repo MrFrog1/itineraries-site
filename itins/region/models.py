@@ -1,9 +1,15 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import ArrayField
 
 
 class Region(models.Model):
+    name = models.CharField(max_length=100, default='', blank=True, null=True)
     description = models.CharField(max_length=350)
+    shortkey = models.CharField(max_length=55, null=True, blank=True)
+    best_months = ArrayField(models.CharField(max_length=20), blank=True, default=list)
+    best_for = ArrayField(models.CharField(max_length=20), blank=True, default=list)
+    
     # Temperature fields
     january_min_temperature = models.IntegerField(default=0)
     february_min_temperature = models.IntegerField(default=0)
@@ -73,3 +79,12 @@ class Region(models.Model):
 
     def __str__(self):
         return self.description
+    
+
+class RegionSubsection(models.Model):
+    name = models.CharField(max_length=100)
+    region = models.ForeignKey('Region', on_delete=models.CASCADE, related_name='subsections')
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.region.name}"

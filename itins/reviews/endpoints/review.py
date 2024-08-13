@@ -1,7 +1,9 @@
-from rest_framework import routers
-from reviews.api import ReviewViewSet
+from rest_framework.routers import DefaultRouter
+from reviews.api import ReviewViewSet, ExternalReviewViewSet
 
-router = routers.DefaultRouter()
-router.register('', ReviewViewSet, 'reviews')
+router = DefaultRouter()
+router.register(r'reviews', ReviewViewSet)
+router.register(r'external-reviews', ExternalReviewViewSet)
+
 
 urlpatterns = router.urls

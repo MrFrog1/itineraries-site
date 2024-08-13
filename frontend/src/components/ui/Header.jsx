@@ -3,47 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../features/auth/authSlice';
 import ModalLogin from '../../features/auth/components/ModalLogin';
 import { Button } from "@/components/ui/button";
-import { useState } from 'react';
 
 export default function Header({ onSelectLabel }) {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const isLoggedIn = Boolean(user);
-  const [selectedLabel, setSelectedLabel] = useState('All');
 
-  const handleLabelClick = (label) => {
-    setSelectedLabel(label);
-    onSelectLabel(label);
-  };
 
   return (
     <header className="flex items-center h-24 px-4 border-b border-gray-200 backdrop-filter backdrop-blur-sm justify-between dark:border-gray-800">
-      <div className="flex items-center space-x-8 flex-1">
-        <span
-          className="font-optimaroman cursor-pointer text-[#A7252A]"
-          style={{ color: selectedLabel === 'All' ? 'black' : '#A7252A' }}
-          onClick={() => handleLabelClick('All')}
-        >
-          All
-        </span>
-        <span
-          className="font-optimaroman cursor-pointer text-[#A7252A]"
-          style={{ color: selectedLabel === 'Hotels' ? 'black' : '#A7252A' }}
-          onClick={() => handleLabelClick('Hotels')}
-        >
-          Hotels
-        </span>
-        <span
-          className="font-optimaroman cursor-pointer text-[#A7252A]"
-          style={{ color: selectedLabel === 'Itineraries' ? 'black' : '#A7252A' }}
-          onClick={() => handleLabelClick('Itineraries')}
-        >
-          Itineraries
-        </span>
-      </div>
-      <div className="flex justify-center">
-        <img src="/static/images/headergreen.png" alt="Header Logo" />
-      </div>
       <div className="flex items-center space-x-4 flex-1 justify-end">
         {isLoggedIn ? (
           <>

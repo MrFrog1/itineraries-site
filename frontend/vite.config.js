@@ -6,7 +6,19 @@ const cssFileName = 'index.min.css';
 
 export default defineConfig({
   plugins: [react()],
-  publicDir: './public',
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    watch: {
+      usePolling: true,
+    },
+    proxy: {
+      '/api': {
+        target: 'http://web:8000',
+        changeOrigin: true,
+      }
+    }
+  },
   build: {
     assetsInclude: ['**/*.ttf', '**/*.otf', '**/*.woff', '**/*.woff2'],
     rollupOptions: {
@@ -36,4 +48,17 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+optimizeDeps: {
+  include: [
+    '@radix-ui/react-popover',
+    '@radix-ui/react-tabs',
+    '@radix-ui/react-progress',
+    '@radix-ui/react-switch',
+    'react-infinite-scroll-component'
+    // Add any other Radix UI components you're using
+  ]
+},
+  define: {
+    'process.env': {}
+  }
 });

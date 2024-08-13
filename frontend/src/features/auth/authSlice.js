@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { api } from '../../services/api'; // Ensure this path is correct
+import { api } from '../../services/api';
 
 const initialState = {
-    user: null, // Start with no user
-    token: null, // Now this will only store the access token if necessary
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    user: null,
+    token: null,
+    status: 'idle',
     error: null,
 };
 
@@ -13,43 +13,27 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logoutUser(state) {
-            // Clear user and token information from Redux state
             state.user = null;
             state.token = null;
             state.status = 'idle';
             state.error = null;
-
-            // Clear user info from localStorage if you were storing it there
             localStorage.removeItem('user');
         },
-        setUser(state, action) {
-            const { user, token } = action.payload;
-            if (user) {
-                // Update Redux state with the new user information
-                state.user = user;
-
-                // Optionally, update user info in localStorage
-                // localStorage.setItem('user', JSON.stringify(user));
-            }
-            if (token) {
-                // Only store access token in Redux state if necessary
-                state.token = token.access;
-            }
-            state.status = 'succeeded'; // Update status to reflect successful login
-        }
+        setUser: (state, action) => {
+        const { access_token, refresh_token, ...userData } = action.payload;
+        state.user = userData;
+        state.token = access_token;
+        },
     },
     extraReducers: (builder) => {
         builder
             .addMatcher(
                 api.endpoints.loginUser.matchFulfilled,
                 (state, { payload }) => {
-                    if (payload.user) {
-                        // Set user based on login response
-                        state.user = payload.user;
-                        // Only update the token in state if you need to store the access token
-                        state.token = payload.token.access;
-                        state.status = 'succeeded';
-                    }
+                    const { access_token, ...user } = payload;
+                    state.user = user;
+                    state.token = access_token;
+                    state.status = 'succeeded';
                 }
             )
             .addMatcher(api.endpoints.loginUser.matchPending, (state) => {

@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from .models import Contact, ContactCategory, ContactBusiness
-from media.serializers import PhotoSerializer
+from media.serializers import DetailedPhotoSerializer
 class ContactCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactCategory
@@ -16,7 +16,7 @@ class ContactBusinessSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     category = ContactCategorySerializer()
     business = ContactBusinessSerializer()
-    photos = PhotoSerializer(many=True, read_only=True, source='contact_photos')  # Ensure the source matches the related_name in Photo model
+    photos = DetailedPhotoSerializer(many=True, read_only=True, source='contact_photos')  # Ensure the source matches the related_name in Photo model
 
     class Meta:
         model = Contact

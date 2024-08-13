@@ -1,49 +1,23 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useLoginUserMutation } from '../../../services/api'; // Correct path as necessary
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../authSlice'; // Correct path as necessary
+import { useLogin } from '../../../hooks/useLogin';
+import { useNavigate, Link } from 'react-router-dom';
+import { LoginErrorMessage } from './LoginErrorMessage';
+
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+
 export default function LoginComponent() {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [loginUser, { isLoading, isError, error }] = useLoginUserMutation(); // Ensure isError is being correctly destructured here
   const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
+  const { login, error, isLoading, isError } = useLogin(navigate);  // Make sure to destructure isLoading here
 
-  const from = location.state?.from?.pathname || '/';
-    const onSubmit = async (data) => {
-    const { usernameOrEmail, password } = data;
-    const credentials = {
-        password,
-        ...(usernameOrEmail.includes('@') ? { email: usernameOrEmail } : { username: usernameOrEmail }),
-    };
-
-    try {
-        const result = await loginUser(credentials).unwrap();
-
-        // Extract user info; the backend should handle tokens
-        // Since we're not using the tokens on the client-side directly, except for the access token if necessary.
-        const { access, ...userInfo } = result; // Assuming 'access' is your access token
-
-        // Dispatch setUser action with user info. Assuming your backend returns user info separately from tokens
-        dispatch(setUser({
-            user: userInfo, // Contains all user details excluding tokens
-            token: access, // Only the access token is needed if you're using it client-side for API requests
-        }));
-
-        // Redirect after successful login
-        navigate(from, { replace: true });
-    } catch (error) {
-        console.error('Login failed', error);
-        // Here you could handle specific login errors, show messages to the user, etc.
-    }
-};
+  const onSubmit = (data) => {
+    login(data);
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto">

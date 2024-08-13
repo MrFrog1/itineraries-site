@@ -8,7 +8,7 @@ from hotels.models import HotelRoom
 # A Component can be a hotel, a taxi, a guide, a restaurant, etc
 
 # A component can depend on a Contact? Or it can be from a category list?
-
+# HAVE GLOBAL COMPONENTS THAT ANYONE CAN ACCESS
 
 class ComponentType(models.Model):
     name = models.CharField(max_length=100)

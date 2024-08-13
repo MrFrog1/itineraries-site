@@ -4,19 +4,22 @@ from django.apps import apps
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from region.models import Region
 
 class User(AbstractUser):
     # Common fields
     phone_number = models.CharField(max_length=50, blank=True, null=True)
     email_address = models.EmailField(blank=True, null=True, unique=True)
     country = models.CharField(max_length=55, blank=True, null=True)
-    region = models.CharField(max_length=100, blank=True, null=True)
     public_profile = models.BooleanField(default=False)
     nickname = models.CharField(max_length=50, blank=True, null=True)
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Role-based fields
     is_agent = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
+    is_superuser=models.BooleanField(default=  False)
+
 
     def has_interacted_with(self, other_user):
         # Dynamically import the Message and CustomerItinerary models
@@ -32,15 +35,20 @@ class User(AbstractUser):
             if shared_itinerary:
                 return True
             
-
+  
             
 class ExpertiseCategory(models.Model):
     name = models.CharField(max_length=100)
 
 class AgentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='agent_profile')
+    short_bio = models.TextField(max_length=155, blank=True, null=True)
     bio = models.TextField(max_length=450, blank=True, null=True)
-    expertise_category = models.ManyToManyField(ExpertiseCategory, blank=True)
+    business_name = models.CharField(max_length=55, blank=True, null=True)
+    expertise_categories = models.ManyToManyField(ExpertiseCategory, blank=True)
+    website = models.URLField(blank=True, null=True)
+    instagram_link = models.URLField(blank=True, null=True)
+    sustainability_practices = models.TextField(blank=True, null=True)
     hotel_owner = models.BooleanField(default=False)
     paired_with_other_agent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     join_date = models.DateField(null=True, blank=True)

@@ -10,20 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 import inspect
 from datetime import timedelta
+# from django.core.exceptions import ImproperlyConfigured
 
 # Needed for 'debug' to be available inside templates.
 # https://docs.djangoproject.com/en/3.2/ref/templates/api/#django-template-context-processors-debug
 
 
-# Vite App Dir: point it to the folder your vite app is in.
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
 VITE_APP_DIR = os.path.join(BASE_DIR, "frontend")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -36,9 +43,7 @@ DEBUG = True
 
 # This is where you put your domain
 # Like this ALLOWED_HOSTS = ['your-production-domain.com']
-ALLOWED_HOSTS = ["*"]
-
-
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'rest_framework',
+    'django.contrib.gis',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'forum.apps.ForumConfig',
@@ -59,17 +65,24 @@ INSTALLED_APPS = [
     'region.apps.RegionConfig',
     'reviews.apps.ReviewsConfig',
     'waypoints.apps.WaypointsConfig',
+    'common',
+    'search.apps.SearchConfig',
     'media.apps.MediaConfig',
     'messages_user.apps.MessagesUserConfig',
     'user_feed.apps.UserFeedConfig',
     'db_changes.apps.DbChangesConfig',
     'frontend',
-    'rest_framework_simplejwt.token_blacklist',
+    'oauth2_provider',
     'corsheaders',
+    'management_commands',
 
 
 ]
 
+SESSION_COOKIE_SECURE = True  # Use only with HTTPS
+CSRF_COOKIE_SECURE = True  # Use only with HTTPS
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,12 +121,19 @@ WSGI_APPLICATION = 'itins.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'your_db_name',
+        'USER': 'your_db_user',
+        'PASSWORD': 'your_db_password',
+        'HOST': 'db',  # This should match the service name in docker-compose.yml
+        'PORT': '5432',
     }
 }
+
+# SPATIALITE_LIBRARY_PATH = 'mod_spatialite'
 
 AUTH_USER_MODEL = 'customers.User'
 
@@ -137,49 +157,51 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
-    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%dT%H:%M:%S.%fZ'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-
-        'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.permissions.IsAuthenticated',  # Added this line
     ),
 }
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
+#     'ROTATE_REFRESH_TOKENS': True,
+#     'BLACKLIST_AFTER_ROTATION': True,
+#     'UPDATE_LAST_LOGIN': False,
+#     'TOKEN_OBTAIN_HANDLER': 'itins.utils.custom_jwt_response_handler',
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
-    'TOKEN_OBTAIN_HANDLER': 'itins.utils.custom_jwt_response_handler',
+#     'ALGORITHM': 'HS256',
 
-    'ALGORITHM': 'HS256',
+#     'VERIFYING_KEY': None,
+#     'AUDIENCE': None,
+#     'ISSUER': None,
+#     'JWK_URL': None,
+#     'LEEWAY': 0,
 
-    'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
-    'JWK_URL': None,
-    'LEEWAY': 0,
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+#     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+#     'USER_ID_FIELD': 'id',
+#     'USER_ID_CLAIM': 'user_id',
+#     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+#     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+#     'TOKEN_TYPE_CLAIM': 'token_type',
+#     'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
 
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+#     'JTI_CLAIM': 'jti',
 
-    'JTI_CLAIM': 'jti',
+#     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+#     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+# }
 
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-}
-
+AUTHENTICATION_BACKENDS = [
+    'oauth2_provider.backends.OAuth2Backend',
+    'customers.auth_backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -191,6 +213,28 @@ USE_I18N = True
 
 USE_TZ = True
 
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+        'groups': 'Access to your groups'
+    },
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,  # 1 hour
+    'REFRESH_TOKEN_EXPIRE_SECONDS': 86400,  # 1 day
+    'ROTATE_REFRESH_TOKEN': True,  # Changed to True for better security
+    'ALLOWED_GRANT_TYPES': [
+        'password',
+        'authorization_code',
+        'client_credentials',
+        'refresh_token',
+    ],
+    'CLIENT_ID_GENERATOR_CLASS': 'oauth2_provider.generators.ClientIdGenerator',
+    'OAUTH2_VALIDATOR_CLASS': 'oauth2_provider.oauth2_validators.OAuth2Validator',
+    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.OAuthLibCore',  # Added this line
+    'OAUTH2_SERVER_CLASS': 'oauthlib.oauth2.Server',  # Added this line
+}
+
+GOOGLE_API_KEY = 'AIzaSyCGnelTCv_GGZt0_uBkJubNVZOxa__3OOs'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -220,17 +264,70 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Development
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "http://localhost:5173",
-        # Add your frontend's origin in development
-    # Add other domains as needed
+    # Add any other frontend origins you might use
 ]
+
+# Only use this for development. For production, set it to False
+# CORS_ALLOW_ALL_ORIGINS = True
+
+# If you need to allow specific HTTP methods
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
 
 INTERNAL_IPS = {
     'localhost',
     '127.0.0.1',
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+# Cache time to live is 15 minutes (in seconds)
+CACHE_TTL = 60 * 15
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        '': {  # Root logger
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+        },
+    },
+}
 # IMPORTANT
 #  Just ensure that your Django backend and frontend are served over HTTPS in production to secure cookies.
 # In production, ensure your Django application is secure:

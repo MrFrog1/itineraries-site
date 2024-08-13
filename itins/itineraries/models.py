@@ -5,7 +5,7 @@ from contacts.models import Contact
 from components.models import Component
 from django.core.exceptions import ValidationError
 from db_changes.models import DbChange
-
+from common.models import Tag
 
 
 # On this page, and on the components page, we have a problem with pricing. . For example, some things pricing is wildly difficult for 1-3 pax, than it is for 4-7 pax. 
@@ -17,19 +17,6 @@ from db_changes.models import DbChange
 # or range pricing (1-3 this much per pax, or 4-7 this much per pax). Then, we can have a function that calculates the price based on the PricingMatrix.
 
 # Another option is that we have enhanced models for each of the components, and then we can have a function that calculates the price based on the enhanced model.
-
-
-CATEGORY_CHOICES = [
-    ('culinary', 'Culinary'),
-    ('wildlife', 'Wildlife'),
-    ('adventure', 'Adventure'),
-    ('trekking', 'Trekking'),
-    ('history', 'Historic'),
-    ('cultural', 'Cultural'),
-    ('motorbiking', 'Motorbiking'),
-    ('fishing', 'Fishing'),
-    # ... (add all your categories here)
-]
 
 
 
@@ -60,8 +47,14 @@ class NonCustomerParticipant(models.Model):
 
 
 class AgentItinerary(Itinerary):
+
+    TYPE_CHOICES = [
+        ('hiking', 'Hiking'),
+        ('fishing', 'Fishing'),
+        ('cultural', 'Cultural'),
+        ('cuisine', 'Cuisine'), 
+    ]
     agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="agent_itineraries")
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)  # Define CATEGORY_CHOICES elsewhere
     customisable = models.BooleanField(default=False)
     cost_for_1_pax = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     cost_for_2_pax = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -76,6 +69,10 @@ class AgentItinerary(Itinerary):
     short_visible_description = models.TextField(max_length=255, blank=True, null=True)
     visible_description = models.TextField(max_length=800, blank=True, null=True)
     price_breakdown = models.BooleanField(default=False)
+
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    tags = models.ManyToManyField(Tag, blank=True)
+
 
 # ratings by month of best time to go 
     
@@ -138,8 +135,7 @@ class AgentItinerary(Itinerary):
             region=self.region,
             agent=self.agent,
             expert=self.expert,
-            guide=self.guide,
-            category=self.category
+            guide=self.guide
         )
         return customer_itinerary
     

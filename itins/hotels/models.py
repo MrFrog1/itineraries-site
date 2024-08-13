@@ -1,40 +1,70 @@
 from django.db import models
 from django.conf import settings
 from contacts.models import Contact
-from region.models import Region
+from region.models import Region, RegionSubsection
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 # from modeltranslation.translator import register, TranslationOptions (Is Creating an error with AppRegistry. Get this fixed)
 from django.contrib.auth import get_user_model
+from common.models import Tag
+from django.db.models import Avg
+
+
 
 User = get_user_model()
 
 
 class Hotel(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
+    TYPE_CHOICES = [
+        ('farmstay', 'Farmstay'),
+        ('beach', 'Beach'),
+        ('jungle', 'Wildlife and Jungle Lodges'),
+        ('private villas', 'Private Villas'),
+        ('wellness retreats', 'Wellness Retreats'),
+        ('mountain stays', 'Mountain Stays'),
+        ('hiking lodge', 'Hiking Lodge'),
+    ]
 
-    # Platform Hotel is whether it's one that we would recommend on our platform, or one whose details are useful for agents to have, like Grand Dragon
+
+    name = models.CharField(max_length=155)
+    description = models.TextField()
     platform_hotel = models.BooleanField(default=False)
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
+    region_subsection = models.ForeignKey(RegionSubsection, on_delete=models.SET_NULL, null=True, blank=True)
+    tripadvisor_url = models.URLField(blank=True, null=True)
 
-    rating = models.IntegerField(null=True, blank=True, default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    website = models.URLField(blank=True, null=True)
+    instagram_link = models.URLField(blank=True, null=True)
+    phone_number = models.CharField(max_length=50, blank=True, null=True)
+    whatsapp_number = models.CharField(max_length=50, blank=True, null=True)
+    email_address = models.EmailField(blank=True, null=True, unique=True)
 
-    # Having both Google Place and Long/Lat allows for us to choose a different API for the map location
+    booking_com_url = models.URLField(blank=True, null=True)
     google_place_id = models.CharField(max_length=255, null=True, blank=True)
-    
-# Min Price so can say 'Starting Price from... per night' Can calcyulate
+    type = models.CharField(max_length=100, choices=TYPE_CHOICES)
+    tags = models.ManyToManyField(Tag, blank=True)
     min_price_in_INR = models.DecimalField(max_digits=9, decimal_places=2, null=True, validators=[MinValueValidator(0)])
+    is_active = models.BooleanField(default=True)
 
-    is_active = models.BooleanField(default=True)  # Field to indicate if the hotel is active
+    @property
+    def overall_rating(self):
+        internal_avg = self.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+        external_avg = self.external_reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+        
+        internal_weight = 0.7
+        external_weight = 0.3
+        
+        overall = (internal_avg * internal_weight) + (external_avg * external_weight)
+        return round(overall, 1)
 
-    # If a hotel decides to remove itself from the platform, this is what happens
     def soft_delete(self):
         self.is_active = False
         self.save()
 
-
+    def __str__(self):
+        return self.name
+    
 class PaymentType(models.Model):
     PAYMENT_CHOICES = [
         ('paytm', 'PayTM'),
@@ -45,25 +75,32 @@ class PaymentType(models.Model):
         ('visa', 'Visa'),
         ('mastercard', 'MasterCard'),
         ('amex', 'Amex'),
+        ('foreign currency', 'Foreign Currency'),
+
     ]
 
-    type = models.CharField(max_length=20, choices=PAYMENT_CHOICES, unique=True)
+    payment_type = models.CharField(max_length=20, choices=PAYMENT_CHOICES, unique=True)
 
     def __str__(self):
         return self.get_type_display()
 
 class CustomizedHotel(Hotel):
+    HOTEL_OWNER_ROLE = [
+        ('owner', 'Owner'),
+        ('manager', 'Manager'),
+        ('founder', 'Founder'),
+    ]
 
     hotel_owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_customized_hotels')
-    instagram_link = models.URLField(null=True, blank=True)
+    hotel_owner_role = models.CharField(max_length=20, choices=HOTEL_OWNER_ROLE, unique=True, null=True, blank=True) 
     pet_friendly = models.BooleanField(default=False)
     wheelchair_accessible = models.BooleanField(default=False)
-        
+
     payment_types = models.ManyToManyField(PaymentType, blank=True)
     private_info = models.CharField(max_length=155, null=True, blank=True)
     serves_alcohol = models.BooleanField(default=False)
 
-
+ 
     def __str__(self):
         return f"Owner Customized - {self.name}"
 
@@ -102,7 +139,8 @@ class AgentHotel(Hotel):
 
 class HotelRoom(models.Model):
     name = models.CharField(max_length=40)
-    room_description = models.CharField(max_length=100)
+    room_description = models.CharField(max_length=555)
+    room_size_sq_ft = models.IntegerField(blank=True, null=True)
     
     # Relationship with CustomizedHotel
     customized_hotel = models.ForeignKey(CustomizedHotel, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotel_rooms')

@@ -7,7 +7,7 @@ import MainHeader from '../general/layout/header/MainHeader';
 const Login = ({ location }) => {
   // Assume `isAuthenticated` is part of the state your userReducer manages
   // Adjust the path according to how you've structured your Redux store and slices
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+const isAuthenticated = useSelector((state) => !!state.auth.token);
 
   // Redirect logic based on authentication status and the presence of redirect state
   if (isAuthenticated) {

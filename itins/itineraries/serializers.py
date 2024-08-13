@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from region.serializers import RegionSerializer
+from region.serializers import BasicRegionSerializer
 from contacts.serializers import ContactSerializer
 from .models import Itinerary, ItineraryGroup, ItineraryGrouping, ItineraryDay, ItineraryDayComponent, CustomerItinerary, AgentItinerary
-
+from common.serializers import TagSerializer
 
 class ItineraryDayComponentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,23 +78,34 @@ class ItineraryGroupingSerializer(serializers.ModelSerializer):
         return representation
     
 
-class ItinerarySerializer(serializers.ModelSerializer):
-    region = RegionSerializer(read_only=True)
+class BasicAgentItinerarySerializer(serializers.ModelSerializer):
+    region = BasicRegionSerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = AgentItinerary
+        fields = ['id', 'name', 'short_visible_description', 'region', 'type', 'cost_for_1_pax', 'cost_for_2_pax', 'tags', 'type']
+
+
+
+class DetailedAgentItinerarySerializer(serializers.ModelSerializer):
+    region = BasicRegionSerializer(read_only=True)
     guide = ContactSerializer(read_only=True)
     itinerary_groups = ItineraryGroupingSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
     created_at = serializers.DateTimeField(read_only=True)  # Assuming your model has this field
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Itinerary
-        fields = ['name', 'description', 'internal_notes_for_agent', 'customisable', 'category',
+        fields = ['name', 'short_visible_description', 'visible_description', 'internal_notes_for_agent', 'customisable', 'type',
                   'region', 'cost_for_1_pax', 'cost_for_2_pax', 'cost_for_3_pax', 'cost_for_4_pax',
                   'cost_with_tour_leader_1_pax', 'agent', 'expert', 'guide', 'agent_made', 
                   'verified_by_admin', 'customised_by_guest', 'itinerary_parent', 'price_breakdown', 
                   'january_rating', 'february_rating', 'march_rating', 'april_rating', 'may_rating', 
                   'june_rating', 'july_rating', 'august_rating', 'september_rating', 'october_rating', 
                   'november_rating', 'december_rating', 'customer', 'itinerary_groups', 'total_price', 
-                  'created_at']
+                  'created_at','tags']
 
     def get_total_price(self, obj):
         # Implement the logic to calculate the total price based on ItineraryGroups
@@ -147,28 +158,30 @@ class CustomerItinerarySerializer(serializers.ModelSerializer):
         return representation
 
 
-class AgentItinerarySerializer(serializers.ModelSerializer):
-    region = RegionSerializer(read_only=True)
-    guide = ContactSerializer(read_only=True)
-    itinerary_groups = ItineraryGroupingSerializer(many=True, read_only=True)
+# class AgentItinerarySerializer(serializers.ModelSerializer):
+#     region = RegionSerializer(read_only=True)
+#     guide = ContactSerializer(read_only=True)
+#     itinerary_groups = ItineraryGroupingSerializer(many=True, read_only=True)
+#     tags = TagSerializer(many=True, read_only=True)
 
-    class Meta:
-        model = AgentItinerary
-        fields = ['id', 'name', 'region', 'agent', 'expert', 'guide', 'category', 'customisable', 'cost_for_1_pax', 'cost_for_2_pax', 'cost_for_3_pax', 'cost_for_4_pax', 'with_leader_cost_for_1_pax', 'with_leader_cost_for_2_pax', 'with_leader_cost_for_3_pax', 'with_leader_cost_for_4_pax', 'visible_description', 'price_breakdown', 'itinerary_groups']
-        read_only_fields = ['price_breakdown']  # Assuming price_breakdown should not be editable
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
+#     class Meta:
+#         model = AgentItinerary
+#         fields = ['id', 'name', 'region', 'tags', 'agent', 'expert', 'guide', 'category', 'customisable', 'cost_for_1_pax', 'cost_for_2_pax', 'cost_for_3_pax', 'cost_for_4_pax', 'with_leader_cost_for_1_pax', 'with_leader_cost_for_2_pax', 'with_leader_cost_for_3_pax', 'with_leader_cost_for_4_pax', 'visible_description', 'price_breakdown', 'itinerary_groups']
+#         read_only_fields = ['price_breakdown']  # Assuming price_breakdown should not be editable
 
-        # Hide the price breakdown if it should not be visible
-        if not instance.price_breakdown_visible:
-            representation.pop('price_breakdown', None)
+#     def to_representation(self, instance):
+#         representation = super().to_representation(instance)
 
-        from customers.serializers import UserSerializer       
-        representation['agent'] = UserSerializer(instance.agent, read_only=True).data
-        representation['expert'] = UserSerializer(instance.expert, read_only=True).data
+#         # Hide the price breakdown if it should not be visible
+#         if not instance.price_breakdown:
+#             representation.pop('price_breakdown', None)
 
-        return representation
+#         from customers.serializers import UserSerializer       
+#         representation['agent'] = UserSerializer(instance.agent, read_only=True).data
+#         representation['expert'] = UserSerializer(instance.expert, read_only=True).data
+
+#         return representation
     
 
-        return representation
+#         return representation

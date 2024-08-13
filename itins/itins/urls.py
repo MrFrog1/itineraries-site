@@ -16,17 +16,38 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from rest_framework_simplejwt.views import TokenRefreshView
-from customers.api import MyTokenObtainPairView, CustomerRegisterView, current_user  # Adjusted import
-from django.views.generic import TemplateView
+from customers.api import CustomerRegisterView, current_user, AgentProfileView, AllAgentsView, TokenView, AgentRegisterView, AgentSearchView
+from region.api import RegionViewSet
+from django.conf import settings
+from django.conf.urls.static import static
+from oauth2_provider.urls import base_urlpatterns, app_name
+from oauth2_provider.views import AuthorizationView, TokenView as OAuthTokenView, RevokeTokenView
 
+
+oauth2_endpoint_views = [
+    path('authorize/', AuthorizationView.as_view(), name="authorize"),
+    path('token/', TokenView.as_view(), name="token"),
+    path('revoke_token/', RevokeTokenView.as_view(), name="revoke-token"),
+]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('o/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace='oauth2_provider')),
+
+
+# Registering/Creation
+
     path('register/', CustomerRegisterView.as_view(), name='register'),
-    path('profile/', current_user, name='current_user'),  # Combined URL for getting and updating profile
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('register/agent/', AgentRegisterView.as_view(), name='agent_register'),
+
+
+    path('profile/', current_user, name='current_user'),
+
+# Agents 
+    path('api/agents/<int:pk>/', AgentProfileView.as_view(), name='agent-profile'),
+    path('api/agents/search/', AgentSearchView.as_view(), name='agent-search'),
+    path('api/agents/', AllAgentsView.as_view(), name='all-agents'),
+
 
 # Endpoints
     path('api/components/components', include('components.endpoints.component')),
@@ -48,11 +69,16 @@ urlpatterns = [
     # THERE IS ALSO A api/media/photos/unverified and the same for videos
 
     path('api/regions', include('region.endpoints.regions')),
+    path('api/regions/detailed', RegionViewSet.as_view({'post': 'detailed'}), name='regions-detailed'),
     path('api/reviews', include('reviews.endpoints.review')),
     path('api/waypoints', include('waypoints.endpoints.waypoints')),
+    path('api/airports/', include('waypoints.endpoints.airports')),
 
+    # path('api/search', include('search.endpoints.search')),
 
-    path('api/itineraries/agent_itineraries', include('itineraries.endpoints.agent_itinerary')),
+    path('api/airports/', include('waypoints.endpoints.airports')),
+
+    path('api/itineraries/', include('itineraries.endpoints.agent_itinerary')),
     path('api/itineraries/customer_itineraries', include('itineraries.endpoints.customer_itinerary')),
     path('api/itineraries/itinerary_day_components', include('itineraries.endpoints.itinerary_day_component')),
     path('api/itineraries/itinerary_days', include('itineraries.endpoints.itinerary_day')),
@@ -61,6 +87,7 @@ urlpatterns = [
 
 
     # path('', include('frontend.urls')),
-    re_path(r'^(?:.*)?', TemplateView.as_view(template_name="base.html"),)
-
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

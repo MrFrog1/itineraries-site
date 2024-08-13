@@ -1,0 +1,21 @@
+FROM node:18
+WORKDIR /app/frontend
+# Copy package.json and package-lock.json
+COPY package*.json ./
+# Install dependencies
+RUN npm install --legacy-peer-deps
+
+
+# Explicitly install Radix UI packages @radix-ui/react-popover @radix-ui/react-tabs @radix-ui/react-progress react-infinite-scroll-component
+RUN npm install  @radix-ui/react-switch
+# Copy the rest of the application
+COPY . .
+# List installed packages for debugging react-infinite-scroll-component @radix-ui/react-popover @radix-ui/react-tabs @radix-ui/react-progress
+RUN npm list  @radix-ui/react-switch
+
+RUN ls -la /app/frontend/node_modules/@radix-ui
+
+# Set host and port for Vite
+ENV HOST=0.0.0.0
+ENV PORT=3000
+CMD ["npm", "run", "dev"]
