@@ -16,13 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from customers.api import CustomerRegisterView, current_user, AgentProfileView, AllAgentsView, TokenView, AgentRegisterView, AgentSearchView
+from customers.api import CustomerRegisterView, current_user, AgentProfileView, AllAgentsView, TokenView, AgentRegisterView, AgentSearchView, CreateAgentView, CreatePotentialAgentView, AllPotentialAgentsView
 from region.api import RegionViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 from oauth2_provider.urls import base_urlpatterns, app_name
 from oauth2_provider.views import AuthorizationView, TokenView as OAuthTokenView, RevokeTokenView
+from django.http import HttpResponse
 
+def test_media(request):
+    return HttpResponse("Media files are being served correctly.")
 
 oauth2_endpoint_views = [
     path('authorize/', AuthorizationView.as_view(), name="authorize"),
@@ -46,7 +49,11 @@ urlpatterns = [
 # Agents 
     path('api/agents/<int:pk>/', AgentProfileView.as_view(), name='agent-profile'),
     path('api/agents/search/', AgentSearchView.as_view(), name='agent-search'),
-    path('api/agents/', AllAgentsView.as_view(), name='all-agents'),
+    path('api/agents', AllAgentsView.as_view(), name='all-agents'),
+    path('api/agents/create', CreateAgentView.as_view(), name='create-agent'),
+    path('api/potential-agents', AllPotentialAgentsView.as_view(), name='all-potential-agents'),
+    path('api/potential-agents/create', CreatePotentialAgentView.as_view(), name='create-potential-agent'),
+
 
 
 # Endpoints
@@ -82,11 +89,13 @@ urlpatterns = [
     path('api/itineraries/customer_itineraries', include('itineraries.endpoints.customer_itinerary')),
     path('api/itineraries/itinerary_day_components', include('itineraries.endpoints.itinerary_day_component')),
     path('api/itineraries/itinerary_days', include('itineraries.endpoints.itinerary_day')),
-    path('api/itineraries/itinerary.groups', include('itineraries.endpoints.itinerary_group')),
-    path('api/itineraries/itinerary.groupings', include('itineraries.endpoints.itinerary_grouping')),
-
+    path('api/itineraries/itinerary_groups', include('itineraries.endpoints.itinerary_group')),
+    path('api/itineraries/itinerary_groupings', include('itineraries.endpoints.itinerary_grouping')),
 
     # path('', include('frontend.urls')),
+
+    path('test-media/', test_media, name='test_media'),
+
 ]
 
 if settings.DEBUG:

@@ -4,6 +4,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import AddAgentItinerary from '../itineraries/AddAgentItinerary';
 import AddHotel from '../hotels/AddHotel';
+import AddContact from '../contacts/AddContact';
 import AddAgent from '../users/AddAgent';
 import AddComponent from '../components/AddComponent';
 import AddPhotos from '../media/AddPhotos';
@@ -18,6 +19,8 @@ const AdminHomePage = () => {
         return <AddAgentItinerary />;
       case 'Hotel':
         return <AddHotel />;
+      case 'Contact':
+        return <AddContact />;
       case 'Agent':
         return <AddAgent />;
       case 'Component':
@@ -36,6 +39,7 @@ const AdminHomePage = () => {
         <Button onClick={() => setActiveComponent('AgentItinerary')}>Add Agent Itinerary</Button>
         <Button onClick={() => setActiveComponent('Hotel')}>Add Hotel</Button>
         <Button onClick={() => setActiveComponent('Agent')}>Add Agent</Button>
+        <Button onClick={() => setActiveComponent('Contact')}>Add Contact</Button>
         <Button onClick={() => setActiveComponent('Component')}>Add Component</Button>
         <Button onClick={() => setActiveComponent('Photos')}>Add Photos</Button>
       </div>

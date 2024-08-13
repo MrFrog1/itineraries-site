@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthentic
 from .permissions import IsAdminOrReadOnly, IsHotelOwnerOrReadOnly, IsAgentHotelOwnerOrReadOnly, IsHotelRoomOwnerOrAgentOrReadOnly, IsRoomPriceOwnerOrReadOnly
 from django_filters import rest_framework as filters
 
+
+
 class HotelFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="min_price_in_INR", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="min_price_in_INR", lookup_expr='lte')
@@ -35,7 +37,7 @@ class HotelFilter(filters.FilterSet):
 
 
 class HotelViewSet(viewsets.ModelViewSet):
-    queryset = Hotel.objects.all()
+    queryset = Hotel.objects.select_related('customizedhotel').all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = HotelFilter
     search_fields = ['name', 'description', 'region__name', 'type']
@@ -113,14 +115,39 @@ class CustomizedHotelViewSet(viewsets.ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        print('serializer trying to save')
-        # if self.request.user.is_superuser:
-        #     print('serializer trying to save')
-        #     serializer.save()
-        # else:
-        #     raise PermissionDenied("Only admin users can create CustomizedHotels.")
+    def create(self, request, *args, **kwargs):
+        print(f"Received data: {request.data}")  # Debug print
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            print(f"Validation errors: {serializer.errors}")
+            return Response({
+                "status": "error",
+                "errors": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            instance = self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response({
+                "status": "success",
+                "data": serializer.data
+            }, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e:
+            print(f"Error in create: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return Response({
+                "status": "error",
+                "message": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
+        
+    def perform_create(self, serializer):
+        print("Performing create")  # Debug print
+        instance = serializer.save()
+        print(f"Instance created: {instance}")  # Debug print
+        return instance
+        
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.soft_delete()

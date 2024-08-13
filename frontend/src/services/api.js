@@ -99,14 +99,48 @@ export const api = createApi({
     }),
     addComponent: builder.mutation({
       query: (componentData) => ({
-        url: 'api/components/',
+        url: 'api/components/components',
         method: 'POST',
         body: componentData,
       }),
     }),
+    addContact: builder.mutation({
+      query: (data) => ({
+        url: 'api/contacts/contacts',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    addContactCategory: builder.mutation({
+      query: (data) => ({
+        url: 'api/contacts/contact_categories',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    addContactBusiness: builder.mutation({
+      query: (data) => ({
+        url: 'api/contacts/contact_businesses',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    addComponentType: builder.mutation({
+      query: (data) => ({
+        url: 'api/components/component_types',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getAllComponentTypes: builder.query({
+      query: () => 'api/components/component_types',
+    }),
+    getComponentTypes: builder.query({
+      query: (agentId) => `api/components/component_types?agent_id=${agentId}`,
+    }),
     addPhoto: builder.mutation({
       query: (photoData) => ({
-        url: 'api/media/photos/',
+        url: 'api/media/photos',
         method: 'POST',
         body: photoData,
       }),
@@ -120,10 +154,20 @@ export const api = createApi({
     }),
     addAgent: builder.mutation({
       query: (agentData) => ({
-        url: 'api/agents/',
+        url: 'api/agents/create',
         method: 'POST',
         body: agentData,
       }),
+    }),
+    addPotentialAgent: builder.mutation({
+      query: (potentialAgentData) => ({
+        url: 'api/potential-agents/create',
+        method: 'POST',
+        body: potentialAgentData,
+      }),
+    }),
+    getAllPotentialAgents: builder.query({
+      query: () => 'api/potential-agents',
     }),
     getRegions: builder.query({
       query: () => 'api/regions',
@@ -132,12 +176,29 @@ export const api = createApi({
         return response || [];
       },
     }),
-    getDetailedRegions: builder.mutation({
-      query: (ids) => ({
-        url: 'api/regions/detailed',
-        method: 'POST',
-        body: { ids },
-      }),
+    getDetailedRegions: builder.query({ 
+      query: () => 'api/regions/detailed',
+    }),
+    getContacts: builder.query({
+      query: () => 'api/contacts/contacts',
+    }),
+    getComponents: builder.query({
+      query: (agentId) => `api/components/components?agent_id=${agentId}`,
+    }),
+    getItineraryGroups: builder.query({
+      query: (agentId) => `api/itineraries/itinerary_groups?agent_id=${agentId}`,
+    }),
+    getItineraryDays: builder.query({
+      query: (agentId) => `api/itineraries/itinerary_days?agent_id=${agentId}`,
+    }),
+    getAgentItineraries: builder.query({
+      query: (agentId) => `api/itineraries/${agentId ? `?agent=${agentId}` : ''}`,
+    }),
+    getContactCategories: builder.query({
+      query: () => 'api/contacts/contact_categories',
+    }),
+    getContactBusinesses: builder.query({
+      query: () => 'api/contacts/contact_businesses',
     }),
     chat: builder.mutation({
       query: (message) => ({
@@ -185,7 +246,7 @@ export const api = createApi({
       query: (agentId) => `api/agents/${agentId}`,
     }),
     getAllAgents: builder.query({
-      query: () => 'api/agents/',
+      query: () => 'api/agents',
       transformResponse: (response) => {
         console.log('All Agents API Response:', response);
         return response || [];
@@ -194,21 +255,44 @@ export const api = createApi({
   }),
 });
 
+    // getDetailedRegions: builder.mutation({
+    //   query: (ids) => ({
+    //     url: 'api/regions/detailed',
+    //     method: 'POST',
+    //     body: { ids },
+    //   }),
+    // }),
+    
+
 export const {
   useAddHotelMutation,
   useAddAgentHotelMutation,
   useAddCustomizedHotelMutation,
   useSearchAgentsQuery,
   useAddComponentMutation,
+  useAddComponentTypeMutation,
   useAddPhotoMutation,
   useAddAgentItineraryMutation,
   useAddAgentMutation,  
+  useAddContactMutation,  
+  useAddContactCategoryMutation,  
+  useAddContactBusinessMutation,  
+  useAddPotentialAgentMutation,
   useLoginUserMutation,
   useRegisterUserMutation,
+  useGetComponentsQuery, 
   useGetRegionsQuery,
-  useGetDetailedRegionsMutation,
+  useGetDetailedRegionsQuery,
+  useGetContactsQuery,
+  useGetContactCategoriesQuery,
+  useGetContactBusinessesQuery,
   useGetHotelsQuery,
   useGetItinerariesQuery,
+  useGetAgentItinerariesQuery,
+  useGetItineraryGroupsQuery,
+  useGetItineraryDaysQuery,
+  useGetAllComponentTypesQuery,
+  useGetComponentTypesQuery,
   useGetHotelDetailsQuery,
   useGetItineraryDetailsQuery,
   useSearchItemsQuery,
@@ -216,6 +300,8 @@ export const {
   useGetItineraryPhotosQuery,
   useGetAgentQuery,
   useGetAllAgentsQuery,
+  useGetAllPotentialAgentsQuery,
   useChatMutation,
   
 } = api;
+

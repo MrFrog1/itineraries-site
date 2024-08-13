@@ -29,8 +29,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 VITE_APP_DIR = os.path.join(BASE_DIR, "frontend")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -78,6 +76,9 @@ INSTALLED_APPS = [
 
 
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SESSION_COOKIE_SECURE = True  # Use only with HTTPS
 CSRF_COOKIE_SECURE = True  # Use only with HTTPS
@@ -247,6 +248,16 @@ STATICFILES_DIRS = [
     os.path.join(VITE_APP_DIR, "public"),
 ]
 
+
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.MemoryFileUploadHandler',
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10472880  # 5 MB
+
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MIME_TYPES = {
@@ -292,7 +303,7 @@ INTERNAL_IPS = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': 'memcached:11211',
     }
 }
 
@@ -311,9 +322,11 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'debug.log',
             'formatter': 'verbose',
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 5,
         },
         'console': {
             'level': 'DEBUG',

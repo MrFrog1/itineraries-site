@@ -18,12 +18,18 @@ class ContactCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def create_default_categories(cls, agent):
+        default_categories = ['Taxis', 'Guides', 'Hotels', 'Restaurants']
+        for category in default_categories:
+            cls.objects.create(name=category, agent=agent)
+
+
 class ContactBusiness(models.Model):
     business_name = models.CharField(max_length=100)
-    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    address = models.CharField(max_length=255)
-    gst_number = models.CharField(max_length=50)
-    business_website = models.URLField()
+    agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    gst_number = models.CharField(max_length=50, blank=True, null=True)
+    business_website = models.URLField(blank=True, null=True)
     # Other fields ...
 
     def __str__(self):
@@ -33,21 +39,19 @@ class ContactBusiness(models.Model):
     
 class Contact(models.Model):
     name = models.CharField(max_length=50)
-    preferred_first_name = models.CharField(max_length=50)
+    preferred_first_name = models.CharField(max_length=50, null=True, blank=True)
     agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    daily_rate_where_appropriate = models.DecimalField(max_digits=10, decimal_places=2)
-    categories = models.ManyToManyField(ContactCategory)
-    business = models.ForeignKey(ContactBusiness, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    whatsapp_number = models.CharField(max_length=50)
-    phone_number = models.CharField(max_length=50)
-    email_address = models.EmailField(validators=[validate_contact_email])
+    is_visible_to_others = models.BooleanField(default=False)
+    daily_rate_where_appropriate = models.DecimalField(max_digits=8, decimal_places=2,null=True, blank=True)
+    categories = models.ManyToManyField(ContactCategory, blank=True)
+    business = models.ForeignKey(ContactBusiness, on_delete=models.CASCADE, null=True, blank=True)
+    rating = models.DecimalField(validators=[MinValueValidator(1), MaxValueValidator(5)], max_digits=5, decimal_places=2, null=True, blank=True)
+    whatsapp_number = models.CharField(max_length=50, null=True, blank=True )
+    phone_number = models.CharField(max_length=50, null=True, blank=True)
+    email_address = models.EmailField(validators=[validate_contact_email], null=True, blank=True)
 
 
     def __str__(self):
         return self.name
     
     # Other fields ...
-
-
-

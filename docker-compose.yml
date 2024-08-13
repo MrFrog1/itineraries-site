@@ -1,25 +1,28 @@
-
 services:
   web:
     build: ./itins
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./itins:/app
+      - ./media:/app/media
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - memcached
     environment:
       - DEBUG=1
-      -   DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,[::1]
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,[::1]
       - DATABASE_URL=postgres://your_db_user:your_db_password@db:5432/your_db_name
+      - MEMCACHED_HOST=memcached
     networks:
       - app-network
+
 
   frontend:
     build: ./frontend
     command: npm run dev
-    # command: sh -c "npm install @radix-ui/react-switch npm rebuild rollup && npm run dev" 
+    # command: sh -c "npm install @radix-ui/react-switch @radix-ui/react-scroll-area react-dropzone npm rebuild rollup && npm run dev" 
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
@@ -43,6 +46,13 @@ services:
       - POSTGRES_PASSWORD=your_db_password
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+
+  memcached:
+    image: memcached:latest
+    ports:
+      - "11211:11211"
     networks:
       - app-network
 

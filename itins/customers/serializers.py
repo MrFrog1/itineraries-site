@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, AgentProfile, CustomerProfile, InterestCategory
+from .models import User, AgentProfile, CustomerProfile, InterestCategory, ExpertiseCategory, PotentialAgent, UserAgent
 from media.models import Photo, Video
 from media.serializers import DetailedPhotoSerializer, VideoSerializer
 from reviews.models import Review
@@ -14,9 +14,26 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from django.db.models import Q
 import logging
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
 
+def flexible_url_validator(value):
+    if value:
+        if not value.startswith(('http://', 'https://')):
+            value = 'https://' + value
+        try:
+            URLValidator()(value)
+        except ValidationError:
+            raise serializers.ValidationError("Enter a valid URL.")
+    return value
+
+
+class ExpertiseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpertiseCategory
+        fields = ['id', 'name']
 
 class LoginUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,114 +46,144 @@ class LoginUserSerializer(serializers.ModelSerializer):
             data['interests'] = [interest.name for interest in instance.customer_profile.interests.all()]
         return data
     
-
 class AgentProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    email = serializers.EmailField(source='user.email')
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    public_profile = serializers.BooleanField(source='user.public_profile')
     agent_profile = serializers.SerializerMethodField()
     review_rating = serializers.SerializerMethodField()
     simple_itineraries = serializers.SerializerMethodField()
     detailed_itineraries = serializers.SerializerMethodField()
+    website = serializers.CharField(validators=[flexible_url_validator], required=False, allow_blank=True)
+    instagram_link = serializers.CharField(validators=[flexible_url_validator], required=False, allow_blank=True)
 
     class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'public_profile', 
-                  'agent_profile', 'review_rating', 'simple_itineraries', 'detailed_itineraries']
+        model = UserAgent
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'public_profile', 'password',
+                  'short_bio', 'bio', 'business_name', 'website', 'instagram_link', 
+                  'sustainability_practices', 'hotel_owner', 'default_commission_percentage', 
+                  'default_organisation_fee', 'agent_profile', 'review_rating', 'simple_itineraries', 'detailed_itineraries']
+        read_only_fields = ['review_rating', 'simple_itineraries', 'detailed_itineraries']
+        extra_kwargs = {
+            'short_bio': {'required': False},
+            'bio': {'required': False},
+            # Add other fields here that should be optional
+        }
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        password = validated_data.pop('password')
+        is_agent = validated_data.pop('is_agent')
+
+        user = User.objects.create_user(**user_data, password=password)
+        user_agent = UserAgent.objects.create(user=user, **validated_data)
+        return user_agent
 
     def get_agent_profile(self, obj):
-        if hasattr(obj, 'agent_profile'):
-            profile = obj.agent_profile
-            return {
-                'bio': profile.bio,
-                'expertise_categories': [cat.name for cat in profile.expertise_categories.all()],
-                'business_name': profile.business_name,
-                'website': profile.website,
-                'instagram_link': profile.instagram_link,
-                'sustainability_practices': profile.sustainability_practices,
-            }
-        return None
+        return {
+            'bio': obj.bio,
+            'expertise_categories': [cat.name for cat in obj.expertise_categories.all()],
+            'business_name': obj.business_name,
+            'website': obj.website,
+            'instagram_link': obj.instagram_link,
+            'sustainability_practices': obj.sustainability_practices,
+            'hotel_owner': obj.hotel_owner,
+            'accompanying_agent': obj.accompanying_agent.id if obj.accompanying_agent else None,
+            'join_date': obj.join_date,
+            'agent_starting_date': obj.agent_starting_date,
+            'admin_description': obj.admin_description,
+            'default_commission_percentage': obj.default_commission_percentage,
+            'default_organisation_fee': obj.default_organisation_fee,
+        }
 
     def get_review_rating(self, obj):
-        reviews = Review.objects.filter(agent=obj)
+        reviews = Review.objects.filter(agent=obj.user)
         if reviews.exists():
             return reviews.aggregate(Avg('rating'))['rating__avg']
         return None
 
     def get_simple_itineraries(self, obj):
-        if hasattr(obj, 'agent_itineraries'):
-            return BasicAgentItinerarySerializer(obj.agent_itineraries.all(), many=True).data
+        if hasattr(obj.user, 'agent_itineraries'):
+            return BasicAgentItinerarySerializer(obj.user.agent_itineraries.all(), many=True).data
         return []
 
     def get_detailed_itineraries(self, obj):
-        if hasattr(obj, 'agent_itineraries'):
-            return DetailedAgentItinerarySerializer(obj.agent_itineraries.all(), many=True).data
+        if hasattr(obj.user, 'agent_itineraries'):
+            return DetailedAgentItinerarySerializer(obj.user.agent_itineraries.all(), many=True).data
         return []
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get('request')
 
-        if not instance.public_profile and (not request or not request.user.is_authenticated or request.user.is_customer):
-            # If the profile is not public and the requester is not authenticated or is a customer,
-            # only return minimal information
+        if isinstance(instance, User):
+            instance = instance.user_agent
+
+        if not instance.user.public_profile and (not request or not request.user.is_authenticated or request.user.is_customer):
             return {
-                'id': instance.id,
-                'username': instance.username,
+                'id': instance.user.id,
+                'username': instance.user.username,
                 'public_profile': False
             }
 
-        if not instance.public_profile and request.user.is_agent:
-            # If the requester is an agent, return slightly more information
+        if not instance.user.public_profile and request.user.is_agent:
             return {
-                'id': instance.id,
-                'username': instance.username,
-                'first_name': instance.first_name,
-                'last_name': instance.last_name,
+                'id': instance.user.id,
+                'username': instance.user.username,
+                'first_name': instance.user.first_name,
+                'last_name': instance.user.last_name,
                 'public_profile': False,
-                'review_rating': data['review_rating']
+                'review_rating': self.get_review_rating(instance)
             }
 
-        # For public profiles or admin users, determine what to show based on the context
         if self.context.get('search_results', False):
-            # If this is for search results, return a subset of fields
             return {
-                'id': instance.id,
-                'username': instance.username,
-                'first_name': instance.first_name,
-                'last_name': instance.last_name,
+                'id': instance.user.id,
+                'username': instance.user.username,
+                'first_name': instance.user.first_name,
+                'last_name': instance.user.last_name,
                 'public_profile': True,
-                'review_rating': data['review_rating'],
-                'agent_profile': {
-                    'business_name': data['agent_profile']['business_name'] if data['agent_profile'] else None,
-                    'expertise_categories': data['agent_profile']['expertise_categories'] if data['agent_profile'] else []
-                }
+                'review_rating': self.get_review_rating(instance),
+                'agent_profile': self.get_agent_profile(instance)
             }
 
-        # For detailed view (not search results), return all fields
+        # If none of the above conditions are met, return the full representation
+        data['username'] = instance.user.username
+        data['email'] = instance.user.email
+        data['first_name'] = instance.user.first_name
+        data['last_name'] = instance.user.last_name
+        data['public_profile'] = instance.user.public_profile
         return data
+
     
-class AllAgentsView(generics.ListAPIView):
-    serializer_class = AgentProfileSerializer
-    permission_classes = [AllowAny]
+# class AllAgentsView(generics.ListAPIView):
+#     serializer_class = AgentProfileSerializer
+#     permission_classes = [AllowAny]
 
-    def get_queryset(self):
-        queryset = User.objects.filter(is_agent=True)
+#     def get_queryset(self):
+#         queryset = User.objects.filter(is_agent=True)
 
-        if not self.request.user.is_authenticated or self.request.user.is_customer:
-            queryset = queryset.filter(public_profile=True)
+#         if not self.request.user.is_authenticated or self.request.user.is_customer:
+#             queryset = queryset.filter(public_profile=True)
 
-        return queryset.select_related('agent_profile').prefetch_related('agent_profile__expertise_categories')
+#         return queryset.select_related('agent_profile').prefetch_related('agent_profile__expertise_categories')
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        logger.info(f"Returning {len(serializer.data)} agents")
-        return Response(serializer.data)
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.filter_queryset(self.get_queryset())
+#         serializer = self.get_serializer(queryset, many=True)
+#         logger.info(f"Returning {len(serializer.data)} agents")
+#         return Response(serializer.data)
     
+
 class UserSerializer(serializers.ModelSerializer):
     bio_photos = serializers.SerializerMethodField()
     bio_videos = serializers.SerializerMethodField()
     interests = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    agent_profile = AgentProfileSerializer(read_only=True)
+    user_agent = AgentProfileSerializer(read_only=True)  # Changed from agent_profile to user_agent
     hotels = serializers.SerializerMethodField()
     itineraries = serializers.SerializerMethodField()
     is_visible = serializers.SerializerMethodField()
@@ -147,7 +194,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'username', 'phone_number', 'email', 'country', 'region', 'public_profile', 'nickname',
             'is_agent', 'is_customer', 'is_superuser', 'bio_photos', 'bio_videos', 'interests', 'reviews', 
-            'hotels', 'itineraries', 'agent_profile', 'is_visible', 'is_blocked'
+            'hotels', 'itineraries', 'user_agent', 'is_visible', 'is_blocked'
         ]
         extra_kwargs = {
             'phone_number': {'read_only': True},
@@ -236,15 +283,39 @@ class UserSerializer(serializers.ModelSerializer):
 
         if instance.is_agent:
             if request and request.user.is_authenticated and (request.user.is_superuser or request.user == instance):
-                agent_profile = instance.agent_profile
-                ret['default_commission_percentage'] = agent_profile.default_commission_percentage
-                ret['default_organisation_fee'] = agent_profile.default_organisation_fee
+                user_agent = instance.user_agent
+                ret['default_commission_percentage'] = user_agent.default_commission_percentage
+                ret['default_organisation_fee'] = user_agent.default_organisation_fee
             else:
                 ret.pop('phone_number', None)
                 ret.pop('email', None)
 
         return ret
     
+
+
+class PotentialAgentListSerializer(serializers.ModelSerializer):
+    expertise_categories = serializers.StringRelatedField(many=True)
+
+    class Meta:
+        model = PotentialAgent
+        fields = ['id', 'first_name', 'last_name', 'email', 'business_name', 'expertise_categories']
+
+
+class PotentialAgentSerializer(serializers.ModelSerializer):
+    expertise_categories = serializers.PrimaryKeyRelatedField(queryset=ExpertiseCategory.objects.all(), many=True)
+
+    class Meta:
+        model = PotentialAgent
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'country', 'region', 
+                  'short_bio', 'bio', 'business_name', 'website', 'instagram_link', 'expertise_categories', 'hotel_owner', 'admin_description']
+
+    def create(self, validated_data):
+        expertise_categories = validated_data.pop('expertise_categories', [])
+        potential_agent = PotentialAgent.objects.create(**validated_data)
+        potential_agent.expertise_categories.set(expertise_categories)
+        return potential_agent
+
 class CustomerRegisterSerializer(serializers.ModelSerializer):
     interests = serializers.SlugRelatedField(
         slug_field='name',

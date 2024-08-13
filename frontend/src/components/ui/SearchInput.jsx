@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { CheckIcon } from './icons'
-import { CaretSortIcon } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
+import React, { useState, useMemo, useEffect } from 'react';
+import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -12,301 +10,109 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
-  Popover,
+  Popover, 
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 export default function SearchInput({ 
-  data, 
-  onItemSelect, // Changed from onSelect to onItemSelect
-  onSearch, // Added this prop
-  placeholder = "Select item...",
-  label = (item) => item.name,
-  searchFields = ['name'],
+  data = [],
+  onItemSelect,
+  placeholder = "Select...",
+  searchPlaceholder = "Search...",
+  notFoundMessage = "No item found.",
+  itemType = "item", // New prop for the type of item being searched
   idField = 'id',
-  isLoading = false
+  searchFields = ['name'],
+  isLoading = false,
+  selectedValue = null,
+  label  // Function to generate label for an item
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
+  const [value, setValue] = useState(selectedValue);
+  const [searchTerm, setSearchTerm] = useState("");
 
+
+  // Update local value when selectedValue prop changes
   useEffect(() => {
-    if (data) {
-      setFilteredData(data);
-    }
-  }, [data]);
+    setValue(selectedValue);
+  }, [selectedValue]);
 
-  const handleSearch = (searchTerm) => {
-    if (!data) return;
-    const filtered = data.filter((item) =>
-      searchFields.some(field => 
-        String(item[field]).toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  const filteredData = useMemo(() => {
+    if (!data || !Array.isArray(data) || data.length === 0) return [];
+    return data.filter((item) =>
+      searchFields.some(field => {
+        const fieldValue = item[field];
+        return fieldValue && String(fieldValue).toLowerCase().includes(searchTerm.toLowerCase());
+      })
     );
-    setFilteredData(filtered);
-    onSearch(searchTerm); // Call the passed onSearch function
+  }, [data, searchFields, searchTerm]);
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    if (!open) setOpen(true);
   };
 
+  const selectedItem = data.find((item) => String(item[idField]) === String(value));
+
   return (
-    <div>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-full justify-between"
-          >
-            {value
-              ? label(data?.find((item) => String(item[idField]) === value))
-              : placeholder}
-            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[300px] p-0">
-          <Command>
-            <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} onValueChange={handleSearch} />
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between"
+        >
+          {selectedItem 
+            ? label(selectedItem)
+            : placeholder}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[500px] p-0">
+        <Command>
+          <CommandInput 
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onValueChange={handleSearch}
+          />
+          <CommandList>
             {isLoading ? (
               <CommandItem>Loading...</CommandItem>
             ) : (
               <>
-                {filteredData.length === 0 && <CommandEmpty>No item found.</CommandEmpty>}
-                {filteredData.length > 0 && (
+                {filteredData.length === 0 ? (
+                  <CommandEmpty>{notFoundMessage}</CommandEmpty>
+                ) : (
                   <CommandGroup>
-                    <CommandList>
-                      {filteredData.map((item) => (
-                        <CommandItem
-                          key={item[idField]}
-                          value={String(item[idField])}
-                          onSelect={(currentValue) => {
-                            setValue(currentValue);
-                            setOpen(false);
-                            onItemSelect(data.find(i => String(i[idField]) === currentValue)); // Changed from onSelect to onItemSelect
-                          }}
-                        >
-                          <CheckIcon
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              value === String(item[idField]) ? "opacity-100" : "opacity-0"
-                            )}
-                          />
-                          {label(item)}
-                        </CommandItem>
-                      ))}
-                    </CommandList>
+                    {filteredData.map((item) => (
+                      <CommandItem
+                        key={item[idField]}
+                        value={item[idField]}
+                        onSelect={(currentValue) => {
+                          setValue(currentValue);
+                          setOpen(false);
+                          onItemSelect(item);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === item[idField] ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {label(item)}
+                      </CommandItem>
+                    ))}
                   </CommandGroup>
                 )}
               </>
             )}
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
-
-
-// Working with localised data
-
-// import React, { useState, useEffect } from "react";
-// import { CheckIcon } from './icons'
-// import { CaretSortIcon } from "@radix-ui/react-icons";
-// import { cn } from "@/lib/utils";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Command,
-//   CommandEmpty,
-//   CommandGroup,
-//   CommandInput,
-//   CommandItem,
-//   CommandList,
-// } from "@/components/ui/command";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
-
-// export default function SearchInput({ 
-//   data, 
-//   onSelect, 
-//   placeholder = "Select item...",
-//   label = (item) => item.name,
-//   searchFields = ['name'],
-//   idField = 'id'
-// }) {
-//   const [open, setOpen] = useState(false);
-//   const [value, setValue] = useState("");
-//   const [filteredData, setFilteredData] = useState(data);
-
-//   useEffect(() => {
-//     setFilteredData(data);
-//   }, [data]);
-
-//   const handleSearch = (searchTerm) => {
-//     const filtered = data.filter((item) =>
-//       searchFields.some(field => 
-//         String(item[field]).toLowerCase().includes(searchTerm.toLowerCase())
-//       )
-//     );
-//     setFilteredData(filtered);
-//   };
-
-//   return (
-//     <div>
-//       <Popover open={open} onOpenChange={setOpen}>
-//         <PopoverTrigger asChild>
-//           <Button
-//             variant="outline"
-//             role="combobox"
-//             aria-expanded={open}
-//             className="w-full justify-between"
-//           >
-//             {value
-//               ? label(data.find((item) => String(item[idField]) === value))
-//               : placeholder}
-//             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-//           </Button>
-//         </PopoverTrigger>
-//         <PopoverContent className="w-[300px] p-0">
-//           <Command>
-//             <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} onValueChange={handleSearch} />
-//             <CommandEmpty>No item found.</CommandEmpty>
-//             <CommandGroup>
-//               <CommandList>
-//                 {filteredData.map((item) => (
-//                   <CommandItem
-//                     key={item[idField]}
-//                     value={String(item[idField])}
-//                     onSelect={(currentValue) => {
-//                       setValue(currentValue);
-//                       setOpen(false);
-//                       onSelect(data.find(i => String(i[idField]) === currentValue));
-//                     }}
-//                   >
-//                     <CheckIcon
-//                       className={cn(
-//                         "mr-2 h-4 w-4",
-//                         value === String(item[idField]) ? "opacity-100" : "opacity-0"
-//                       )}
-//                     />
-//                     {label(item)}
-//                   </CommandItem>
-//                 ))}
-//               </CommandList>
-//             </CommandGroup>
-//           </Command>
-//         </PopoverContent>
-//       </Popover>
-//     </div>
-//   );
-// }
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-
-// export default function SearchInput({
-//   placeholder,
-//   onSearch,
-//   isLoading,
-//   items,
-//   onItemSelect,
-//   renderItem,
-//   addNewComponent: AddNewComponent,
-//   addNewButtonText,
-//   dialogTitle,
-//   dialogDescription,
-//   minSearchLength = 2
-// }) {
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [showAddNew, setShowAddNew] = useState(false);
-//   const [open, setOpen] = useState(false);
-
-//   useEffect(() => {
-//     console.log('SearchInput - Items:', items);
-//     console.log('SearchInput - Is Loading:', isLoading);
-//   }, [items, isLoading]);
-
-//   useEffect(() => {
-//     if (searchTerm.length >= minSearchLength) {
-//       setOpen(true);
-//       onSearch(searchTerm);
-//     } else {
-//       setOpen(false);
-//     }
-//   }, [searchTerm, minSearchLength, onSearch]);
-
-//   const handleSearch = (value) => {
-//     console.log('SearchInput - Search term:', value);
-//     setSearchTerm(value);
-//   };
-
-//   const handleSelectItem = (item) => {
-//     onItemSelect(item);
-//     setSearchTerm('');
-//     setOpen(false);
-//   };
-
-//   const safeItems = Array.isArray(items) ? items : [];
-
-//   // const handleAddNewItem = (newItem) => {
-//   //   onItemSelect(newItem);
-//   //   setShowAddNew(false);
-//   //   setSearchTerm('');
-//   //   setOpen(false);
-//   // };
-
-//   // console.log('Items in SearchInput:', items);
-//   // console.log('Is Loading in SearchInput:', isLoading);
-
-//  return (
-//     <>
-//       <Command className="rounded-lg border shadow-md">
-//         <CommandInput 
-//           placeholder={placeholder}
-//           value={searchTerm}
-//           onValueChange={handleSearch}
-//         />
-//         {open && (
-//           <CommandList>
-//             {isLoading && <CommandItem>Loading...</CommandItem>}
-//             {!isLoading && safeItems.length === 0 && <CommandEmpty>No results found.</CommandEmpty>}
-//             {!isLoading && safeItems.length > 0 && (
-//               <CommandGroup heading="Suggestions">
-//                 {safeItems.map((item) => (
-//                   <CommandItem 
-//                     key={item.id} 
-//                     onSelect={() => handleSelectItem(item)}
-//                   >
-//                     {renderItem(item)}
-//                   </CommandItem>
-//                 ))}
-//               </CommandGroup>
-//             )}
-//             {searchTerm.length >= minSearchLength && AddNewComponent && (
-//               <CommandItem onSelect={() => setShowAddNew(true)}>
-//                 {addNewButtonText}: {searchTerm}
-//               </CommandItem>
-//             )}
-//           </CommandList>
-//         )}
-//       </Command>
-      
-//       {showAddNew && (
-//         <Dialog open={showAddNew} onOpenChange={setShowAddNew}>
-//           <DialogContent>
-//             <DialogHeader>
-//               <DialogTitle>{dialogTitle}</DialogTitle>
-//               <DialogDescription>{dialogDescription}</DialogDescription>
-//             </DialogHeader>
-//             <AddNewComponent initialName={searchTerm} onItemAdded={handleAddNewItem} />
-//           </DialogContent>
-//         </Dialog>
-//       )}
-//     </>
-//   );
-// }

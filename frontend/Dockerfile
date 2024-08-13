@@ -8,7 +8,7 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 # Install specific packages
-RUN npm install @radix-ui/react-switch
+RUN npm install @radix-ui/react-switch react-error-boundary @radix-ui/react-checkbox react-dropzone
 
 # Copy the rest of the application
 COPY . .

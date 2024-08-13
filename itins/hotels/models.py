@@ -38,7 +38,7 @@ class Hotel(models.Model):
     instagram_link = models.URLField(blank=True, null=True)
     phone_number = models.CharField(max_length=50, blank=True, null=True)
     whatsapp_number = models.CharField(max_length=50, blank=True, null=True)
-    email_address = models.EmailField(blank=True, null=True, unique=True)
+    email = models.EmailField(blank=True, null=True, unique=True)
 
     booking_com_url = models.URLField(blank=True, null=True)
     google_place_id = models.CharField(max_length=255, null=True, blank=True)
@@ -107,7 +107,10 @@ class CustomizedHotel(Hotel):
     def soft_delete(self):
         self.is_active = False
         self.save()
-
+        
+    @property
+    def overall_rating(self):
+        return super().overall_rating
     
 class AgentHotel(Hotel):
     agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customized_hotels')

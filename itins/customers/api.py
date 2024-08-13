@@ -1,21 +1,23 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status, permissions, generics
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
-from .serializers import LoginUserSerializer, UserSerializer, CustomerRegisterSerializer, AgentProfileSerializer
+from .serializers import LoginUserSerializer, UserSerializer, CustomerRegisterSerializer, AgentProfileSerializer, PotentialAgentSerializer, PotentialAgentListSerializer
 from .permissions import IsOwnerOrReadOnly, IsOwnerOrAdmin
 from oauth2_provider.models import Application
 from oauth2_provider.views.mixins import OAuthLibMixin
 from oauth2_provider.settings import oauth2_settings
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate
-from .serializers import AgentRegisterSerializer
+from .models import PotentialAgent, UserAgent
+from .serializers import AgentRegisterSerializer, PotentialAgentSerializer, PotentialAgentListSerializer    
 from django.db.models import Q
 from rest_framework.permissions import AllowAny
 from django.views.decorators.debug import sensitive_post_parameters
 import json
+
 from oauthlib.oauth2 import OAuth2Error
 import logging
 
@@ -33,8 +35,6 @@ class UserViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAdminUser]
         elif self.action in ['update', 'partial_update', 'destroy']:
             permission_classes = [IsOwnerOrAdmin]
-        elif self.action in ['list', 'retrieve']:
-            permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
@@ -42,22 +42,20 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.is_superuser:
-            return UserModel.objects.all()
+            return UserModel.objects.all().select_related('user_agent', 'customer_profile')
         
-        visible_users = UserModel.objects.filter(public_profile=True)
+        visible_users = UserModel.objects.filter(public_profile=True).select_related('user_agent', 'customer_profile')
         
         if user.is_agent:
-            # Include customers who have interacted with this agent
             interacted_customers = UserModel.objects.filter(
                 is_customer=True, 
                 customer_profile__interacted_agents=user
             ).exclude(
                 customer_profile__blocked_agents=user
-            )
+            ).select_related('customer_profile')
             visible_users = visible_users | interacted_customers
 
         return visible_users.distinct()
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({"request": self.request})
@@ -83,8 +81,20 @@ class UserViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
-    
-    
+
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        user_agent_data = serializer.validated_data.pop('user_agent', None)
+        
+        serializer.save()
+        
+        if user_agent_data and instance.is_agent:
+            user_agent = instance.user_agent
+            for attr, value in user_agent_data.items():
+                setattr(user_agent, attr, value)
+            user_agent.save()
+
+# Authentication related
 
 class TokenView(OAuthLibMixin, APIView):
     permission_classes = []
@@ -206,21 +216,39 @@ class AgentRegisterView(generics.CreateAPIView):
             name=f"{user.username}'s application"
         )
     
+# AGENT LOGIC
+
+
 class AgentProfileView(RetrieveAPIView):
-    queryset = UserModel.objects.filter(is_agent=True)
-    serializer_class = UserSerializer
+    queryset = UserAgent.objects.all
+    serializer_class = AgentProfileSerializer
+
+
+class CreateAgentView(generics.CreateAPIView):
+    serializer_class = AgentProfileSerializer
+    permission_classes = [permissions.IsAdminUser]  # Adjust as needed
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_create(self, serializer):
+        # Add any additional logic for agent creation
+        serializer.save(is_agent=True)
+
 
 class AllAgentsView(generics.ListAPIView):
     serializer_class = AgentProfileSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        queryset = UserModel.objects.filter(is_agent=True)
-
+        queryset = UserAgent.objects.all()
         if not self.request.user.is_authenticated or self.request.user.is_customer:
-            queryset = queryset.filter(public_profile=True)
-
-        return queryset.select_related('agent_profile').prefetch_related('agent_profile__expertise_categories')
+            queryset = queryset.filter(user__public_profile=True)
+        return queryset.select_related('user').prefetch_related('expertise_categories')
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -229,46 +257,62 @@ class AllAgentsView(generics.ListAPIView):
         return Response(serializer.data)
 
 
+# This AgentSearchView gives the option to include potential agents in the search - non-uiser agents, or just agents or both
 class AgentSearchView(generics.ListAPIView):
-    serializer_class = AgentProfileSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
+
+    def get_serializer_class(self):
+        if self.request.query_params.get('include_potential', 'false').lower() == 'true':
+            return PotentialAgentListSerializer
+        return AgentProfileSerializer
 
     def get_queryset(self):
-        queryset = UserModel.objects.filter(is_agent=True)
         search_term = self.request.query_params.get('q', None)
+        include_potential = self.request.query_params.get('include_potential', 'false').lower() == 'true'
         
-        logger.info(f"Searching for term: {search_term}")
+        user_agent_queryset = UserAgent.objects.all()
+        potential_agent_queryset = PotentialAgent.objects.all() if include_potential else PotentialAgent.objects.none()
 
         if search_term:
-            queryset = queryset.filter(
-                Q(username__icontains=search_term) |
-                Q(email__icontains=search_term) |
-                Q(first_name__icontains=search_term) |
-                Q(last_name__icontains=search_term) |
-                Q(nickname__icontains=search_term) |
-                Q(agent_profile__business_name__icontains=search_term) |
-                Q(agent_profile__short_bio__icontains=search_term) |
-                Q(agent_profile__bio__icontains=search_term) |
-                Q(agent_profile__expertise_categories__name__icontains=search_term)
+            user_agent_queryset = user_agent_queryset.filter(
+                Q(user__username__icontains=search_term) |
+                Q(user__email__icontains=search_term) |
+                Q(user__first_name__icontains=search_term) |
+                Q(user__last_name__icontains=search_term) |
+                Q(user__nickname__icontains=search_term) |
+                Q(business_name__icontains=search_term) |
+                Q(short_bio__icontains=search_term) |
+                Q(bio__icontains=search_term) |
+                Q(expertise_categories__name__icontains=search_term)
             ).distinct()
 
+            if include_potential:
+                potential_agent_queryset = potential_agent_queryset.filter(
+                    Q(first_name__icontains=search_term) |
+                    Q(last_name__icontains=search_term) |
+                    Q(email__icontains=search_term) |
+                    Q(business_name__icontains=search_term) |
+                    Q(short_bio__icontains=search_term) |
+                    Q(bio__icontains=search_term) |
+                    Q(expertise_categories__name__icontains=search_term)
+                ).distinct()
+
         if not self.request.user.is_authenticated or self.request.user.is_customer:
-            queryset = queryset.filter(public_profile=True)
+            user_agent_queryset = user_agent_queryset.filter(user__public_profile=True)
 
-        logger.info(f"Query returned {queryset.count()} results")
-
-        return queryset.select_related('agent_profile').prefetch_related('agent_profile__expertise_categories')
+        # Combine the querysets
+        combined_queryset = list(user_agent_queryset) + list(potential_agent_queryset)
+        return combined_queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
+        
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            logger.info(f"Returning {len(serializer.data)} results")
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        logger.info(f"Returning {len(serializer.data)} results")
         return Response(serializer.data)
 
     def get_serializer_context(self):
@@ -276,3 +320,28 @@ class AgentSearchView(generics.ListAPIView):
         context['request'] = self.request
         context['search_results'] = True
         return context
+
+# Potential Agent Logic
+
+class AllPotentialAgentsView(generics.ListAPIView):
+    serializer_class = PotentialAgentListSerializer
+    permission_classes = [permissions.IsAdminUser]  # Only admins can view potential agents
+
+    def get_queryset(self):
+        return PotentialAgent.objects.all().prefetch_related('expertise_categories')
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        logger.info(f"Returning {len(serializer.data)} potential agents")
+        return Response(serializer.data)
+    
+
+class CreatePotentialAgentView(generics.CreateAPIView):
+    queryset = PotentialAgent.objects.all()
+    serializer_class = PotentialAgentSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def perform_create(self, serializer):
+        serializer.save()
+

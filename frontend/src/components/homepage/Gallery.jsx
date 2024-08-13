@@ -6,7 +6,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeftIcon, ChevronRightIcon } from '../ui/icons';
-import { useGetHotelsQuery, useGetItinerariesQuery, useGetRegionsQuery, useGetDetailedRegionsMutation, useChatMutation } from '../../services/api';
+import { useGetHotelsQuery, useGetItinerariesQuery, useGetRegionsQuery, useChatMutation } from '../../services/api';
 import { selectFilteredResults } from '../../features/search/searchSlice';
 import LazyImage from '../ui/LazyImage';
 
@@ -17,7 +17,7 @@ const Gallery = () => {
   const { data: hotels, isLoading: isLoadingHotels } = useGetHotelsQuery();
   const { data: itineraries, isLoading: isLoadingItineraries } = useGetItinerariesQuery();
   const { data: regions, isLoading: isLoadingRegions } = useGetRegionsQuery();
-  const [getDetailedRegions, { data: detailedRegions }] = useGetDetailedRegionsMutation();
+  // const [getDetailedRegions, { data: detailedRegions }] = useGetDetailedRegionsQuery();
 
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);

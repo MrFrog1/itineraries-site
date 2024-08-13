@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from .models import Contact, ContactCategory, ContactBusiness
 from media.serializers import DetailedPhotoSerializer
+
 class ContactCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactCategory
@@ -12,51 +13,75 @@ class ContactBusinessSerializer(serializers.ModelSerializer):
         model = ContactBusiness
         fields = '__all__'
 
-
 class ContactSerializer(serializers.ModelSerializer):
-    category = ContactCategorySerializer()
-    business = ContactBusinessSerializer()
-    photos = DetailedPhotoSerializer(many=True, read_only=True, source='contact_photos')  # Ensure the source matches the related_name in Photo model
+    categories = serializers.PrimaryKeyRelatedField(many=True, queryset=ContactCategory.objects.all(), required=False)
+    business = serializers.PrimaryKeyRelatedField(queryset=ContactBusiness.objects.all(), required=False, allow_null=True)
+    photos = DetailedPhotoSerializer(many=True, read_only=True, source='contact_photos')
 
     class Meta:
         model = Contact
         fields = '__all__'
-        depth = 1  # Adjust the depth as necessary
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        request = self.context.get('request')
+        if request and request.user:
+            if request.user.is_staff or request.user == instance.agent:
+                return rep
+            elif instance.is_visible_to_others:
+                return rep
+        return None  # Return None if the contact should not be visible
 
     def create(self, validated_data):
-        category_data = validated_data.pop('category')
-        business_data = validated_data.pop('business')
+        categories_data = validated_data.pop('categories', [])
+        business_data = validated_data.pop('business', None)
 
-        category, _ = ContactCategory.objects.get_or_create(**category_data)
-        business, _ = ContactBusiness.objects.get_or_create(**business_data)
+        contact = Contact.objects.create(**validated_data)
 
-        contact = Contact.objects.create(category=category, business=business, **validated_data)
+        for category in categories_data:
+            if isinstance(category, ContactCategory):
+                contact.categories.add(category)
+            else:
+                category_obj, _ = ContactCategory.objects.get_or_create(agent=contact.agent, **category)
+                contact.categories.add(category_obj)
+
+        if business_data:
+            if isinstance(business_data, ContactBusiness):
+                contact.business = business_data
+            else:
+                business, _ = ContactBusiness.objects.get_or_create(agent=contact.agent, **business_data)
+                contact.business = business
+
+        contact.save()
         return contact
 
     def update(self, instance, validated_data):
-        category_data = validated_data.pop('category')
-        business_data = validated_data.pop('business')
+        categories_data = validated_data.pop('categories', None)
+        business_data = validated_data.pop('business', None)
 
-        # Update basic fields of Contact
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
-        # Check if a ContactCategory with the given data exists, or create a new one
-        category, _ = ContactCategory.objects.update_or_create(
-            defaults=category_data, 
-            agent=instance.agent,  # Assuming the agent remains constant
-            name=category_data.get('name', instance.category.name)
-        )
-        instance.category = category
+        if categories_data is not None:
+            instance.categories.clear()
+            for category in categories_data:
+                if isinstance(category, ContactCategory):
+                    instance.categories.add(category)
+                else:
+                    category_obj, _ = ContactCategory.objects.get_or_create(agent=instance.agent, **category)
+                    instance.categories.add(category_obj)
 
-        # Check if a ContactBusiness with the given data exists, or create a new one
-        business, _ = ContactBusiness.objects.update_or_create(
-            defaults=business_data, 
-            agent=instance.agent,  # Assuming the agent remains constant
-            business_name=business_data.get('business_name', instance.business.business_name)
-        )
-        instance.business = business
+        if business_data is not None:
+            if isinstance(business_data, ContactBusiness):
+                instance.business = business_data
+            else:
+                if instance.business:
+                    for attr, value in business_data.items():
+                        setattr(instance.business, attr, value)
+                    instance.business.save()
+                else:
+                    business, _ = ContactBusiness.objects.get_or_create(agent=instance.agent, **business_data)
+                    instance.business = business
 
         instance.save()
-        return instance 
+        return instance

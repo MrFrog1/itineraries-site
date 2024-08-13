@@ -28,7 +28,6 @@ yarn-error.log*
 *.pyc
 __pycache__
 db.sqlite3
-media
 
 # Backup files # 
 *.bak 
@@ -40,6 +39,12 @@ media
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+# Ignore media files but not the media app
+media/uploads/
+media/photos/
+media/videos/
+# Add any other media file directories you want to ignore
 
 # AWS User-specific
 .idea/**/aws.xml
